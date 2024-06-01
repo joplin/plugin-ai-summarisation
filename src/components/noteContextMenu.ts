@@ -1,4 +1,3 @@
-
 import joplin from "api";
 import { MenuItemLocation } from "api/types";
 
