@@ -28,6 +28,10 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
-    "summarybot": "^0.0.7"
+    "mathjs": "^13.0.0",
+    "natural": "^7.0.6",
+    "node-polyfill-webpack-plugin": "^4.0.0",
+    "summarybot": "^0.0.7",
+    "svd-js": "^1.1.1"
   }
 }

@@ -1,12 +1,14 @@
 import joplin from "api";
 import { MenuItemLocation } from "api/types";
+import { LexRankHandler } from "../utils/handlers/lex-rank/LexRankHandler";
+import { LSAHandler } from "../utils/handlers/lsa/LSAHandler";
 
 const SummaryBot = require('summarybot');
 const userTriggered = true;
 
 async function summarizeNoteContextMenu(note, multiple: boolean) {
-    const summaryBot = new SummaryBot();
-    const summary = summaryBot.run(note['body'], 3, false)
+    const handler = new LexRankHandler();
+    const summary = handler.predict(note['body']);
     const newBody = `## Summarization\n---\n${summary}\n\n---\n\n${note['body']}`
     if (!multiple) {
         const selectedNote = await joplin.workspace.selectedNote();
