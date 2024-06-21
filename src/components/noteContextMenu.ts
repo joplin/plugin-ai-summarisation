@@ -8,7 +8,11 @@ const userTriggered = true;
 
 async function summarizeNoteContextMenu(note, multiple: boolean) {
     const handler = new LexRankHandler();
-    const summary = handler.predict(note['body']);
+    const summary = await handler.predict(note['body']);
+    console.log(`Summary: ${summary}`);
+    setTimeout(() => createSummary(note, multiple, summary), 1000);
+} 
+async function createSummary(note, multiple, summary) {
     const newBody = `## Summarization\n---\n${summary}\n\n---\n\n${note['body']}`
     if (!multiple) {
         const selectedNote = await joplin.workspace.selectedNote();

@@ -17,6 +17,7 @@ const tar = require('tar');
 const glob = require('glob');
 const execSync = require('child_process').execSync;
 const allPossibleCategories = require('@joplin/lib/pluginCategories.json');
+const { PyodidePlugin } = require("@pyodide/webpack-plugin");
 
 const rootDir = path.resolve(__dirname);
 const userConfigFilename = './plugin.config.json';
@@ -211,16 +212,23 @@ const pluginConfig = { ...baseConfig, entry: './src/index.ts',
 						],
 					},
 				},
+				{
+                    from: path.resolve(__dirname, 'node_modules/word2vec/src'),
+                    to: path.resolve(__dirname, 'dist/word2vec/src'),
+                },
+				{
+					from: path.resolve(__dirname, 'node_modules/word2vec/lib'),
+					to: path.resolve(__dirname, 'dist/word2vec/lib'),
+				},
 			],
 		}),
+		new PyodidePlugin(),
 	],
 	externals: {
-		'node:fs': 'commonjs fs',
-		'node:path': 'commonjs path',
-		'node:os': 'commonjs os',
 		'node:async_hooks': 'commonjs async_hooks',
-	},
-};
+		'child_process': 'commonjs child_process',
+	  },
+	};
 
 const extraScriptConfig = { ...baseConfig, resolve: {
 	alias: {

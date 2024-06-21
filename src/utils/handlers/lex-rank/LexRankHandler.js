@@ -1,6 +1,17 @@
 import { AIHandler } from "../../base";
 const natural = require('natural');
 
+const path = require('path');
+const fs = require('fs');
+const os = require('os');
+
+let w2v;
+if (typeof __webpack_require__ === 'function') {
+    w2v = require('word2vec');
+} else {
+    w2v = require(path.resolve(__dirname, 'dist/word2vec/lib'));
+}
+
 export class LexRankHandler extends AIHandler {
 
     static describe() {
@@ -9,8 +20,38 @@ export class LexRankHandler extends AIHandler {
         `;
     }
 
-    predict(note, topN = 8) {
-        const { tokenizedSentences: sentences, processedSentences } = this.preprocessNote(note);
+    preprocessNote(note) {
+        const sentenceTokenizer = new natural.SentenceTokenizer();
+        const wordTokenizer = new natural.TreebankWordTokenizer();
+        const stopWords = new Set(natural.stopwords);
+
+        const sentences = sentenceTokenizer.tokenize(note);
+        const processedSentences = sentences.map(sentence =>
+            wordTokenizer.tokenize(sentence).filter(word => !stopWords.has(word) && word.match(/^[a-z]+$/))
+        );
+
+        return { sentences, processedSentences };
+    }
+
+    async predict(note, topN = 8) {
+
+        const { sentences, processedSentences } = this.preprocessNote(note);
+
+        const inputFilePath = path.join(os.tmpdir(), 'input_note.txt');
+        const outputFilePath = path.join(os.tmpdir(), 'output_phrases.txt');
+
+        fs.writeFileSync(inputFilePath, note, 'utf8');
+        if (!fs.existsSync(inputFilePath)) {
+            console.error(`Input file ${inputFilePath} does not exist.`);
+            return;
+        }
+
+        setTimeout(w2v.word2vec(inputFilePath, outputFilePath), 1000)
+
+        setTimeout(() => {
+            const phrases = fs.readFileSync(outputFilePath, 'utf8');
+            console.log(phrases);
+        }, 1000)
 
         const tf = this.computeTF(processedSentences);
         const idf = this.computeIDF(processedSentences);
@@ -21,21 +62,11 @@ export class LexRankHandler extends AIHandler {
 
         const topSentences = this.rankSentences(scores, sentences, topN);
         const summary = topSentences.map(item => item.sentence).join(' ');
-    
-        return summary;
-    }
 
-    preprocessNote(note) {
-        const sentenceTokenizer = new natural.SentenceTokenizer();
-        const wordTokenizer = new natural.TreebankWordTokenizer();
-        const stopWords = new Set(natural.stopwords);
+        // fs.unlinkSync(inputFilePath);
+        // fs.unlinkSync(outputFilePath);
 
-        const tokenizedSentences = sentenceTokenizer.tokenize(note);
-        const processedSentences = tokenizedSentences.map(sentence =>
-            wordTokenizer.tokenize(sentence).filter(word => !stopWords.has(word) && word.match(/^[a-z]+$/))
-        );
-
-        return { tokenizedSentences, processedSentences };
+        return summary;   
     }
 
     computeTF(processedSentences) {
