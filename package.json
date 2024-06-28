@@ -30,11 +30,13 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
+    "change-case": "^5.4.4",
+    "charm": "^1.0.2",
     "mathjs": "^13.0.0",
+    "mime": "^4.0.3",
     "natural": "^7.0.6",
     "node-polyfill-webpack-plugin": "^4.0.0",
     "summarybot": "^0.0.7",
-    "svd-js": "^1.1.1",
-    "word2vec": "^1.1.5"
+    "svd-js": "^1.1.1"
   }
 }

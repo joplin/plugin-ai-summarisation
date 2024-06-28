@@ -18,6 +18,7 @@ const glob = require('glob');
 const execSync = require('child_process').execSync;
 const allPossibleCategories = require('@joplin/lib/pluginCategories.json');
 const { PyodidePlugin } = require("@pyodide/webpack-plugin");
+const { IgnorePlugin } = require("webpack");
 
 const rootDir = path.resolve(__dirname);
 const userConfigFilename = './plugin.config.json';
@@ -167,6 +168,9 @@ function onBuildCompleted() {
 	}
 }
 
+
+const TerserPlugin = require('terser-webpack-plugin');
+
 const baseConfig = {
 	mode: 'production',
 	target: 'node',
@@ -180,7 +184,19 @@ const baseConfig = {
 			},
 		],
 	},
+	optimization: {
+        minimize: true,
+        minimizer: [
+            new TerserPlugin({
+                terserOptions: {
+                    compress: true,
+                },
+                exclude: /node_modules/, // Exclude node_modules from being processed by Terser
+            }),
+        ],
+    },
 };
+
 
 const pluginConfig = { ...baseConfig, entry: './src/index.ts',
 	resolve: {
@@ -213,12 +229,8 @@ const pluginConfig = { ...baseConfig, entry: './src/index.ts',
 					},
 				},
 				{
-                    from: path.resolve(__dirname, 'node_modules/word2vec/src'),
-                    to: path.resolve(__dirname, 'dist/word2vec/src'),
-                },
-				{
-					from: path.resolve(__dirname, 'node_modules/word2vec/lib'),
-					to: path.resolve(__dirname, 'dist/word2vec/lib'),
+					from: path.resolve(__dirname, 'ai-service'),
+					to: path.resolve(__dirname, 'dist/ai-service'),
 				},
 			],
 		}),

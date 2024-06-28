@@ -1,16 +1,6 @@
 import { AIHandler } from "../../base";
+
 const natural = require('natural');
-
-const path = require('path');
-const fs = require('fs');
-const os = require('os');
-
-let w2v;
-if (typeof __webpack_require__ === 'function') {
-    w2v = require('word2vec');
-} else {
-    w2v = require(path.resolve(__dirname, 'dist/word2vec/lib'));
-}
 
 export class LexRankHandler extends AIHandler {
 
@@ -36,23 +26,6 @@ export class LexRankHandler extends AIHandler {
     async predict(note, topN = 8) {
 
         const { sentences, processedSentences } = this.preprocessNote(note);
-
-        const inputFilePath = path.join(os.tmpdir(), 'input_note.txt');
-        const outputFilePath = path.join(os.tmpdir(), 'output_phrases.txt');
-
-        fs.writeFileSync(inputFilePath, note, 'utf8');
-        if (!fs.existsSync(inputFilePath)) {
-            console.error(`Input file ${inputFilePath} does not exist.`);
-            return;
-        }
-
-        setTimeout(w2v.word2vec(inputFilePath, outputFilePath), 1000)
-
-        setTimeout(() => {
-            const phrases = fs.readFileSync(outputFilePath, 'utf8');
-            console.log(phrases);
-        }, 1000)
-
         const tf = this.computeTF(processedSentences);
         const idf = this.computeIDF(processedSentences);
         const tfidf = this.computeTFIDF(tf, idf);
@@ -62,9 +35,6 @@ export class LexRankHandler extends AIHandler {
 
         const topSentences = this.rankSentences(scores, sentences, topN);
         const summary = topSentences.map(item => item.sentence).join(' ');
-
-        // fs.unlinkSync(inputFilePath);
-        // fs.unlinkSync(outputFilePath);
 
         return summary;   
     }

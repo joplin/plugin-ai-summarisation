@@ -2,12 +2,13 @@ import joplin from "api";
 import { MenuItemLocation } from "api/types";
 import { LexRankHandler } from "../utils/handlers/lex-rank/LexRankHandler";
 import { LSAHandler } from "../utils/handlers/lsa/LSAHandler";
+import { KMeansClustering } from "../utils/handlers/kmeans-clustering/KMeansHandler";
 
 const SummaryBot = require('summarybot');
 const userTriggered = true;
 
 async function summarizeNoteContextMenu(note, multiple: boolean) {
-    const handler = new LexRankHandler();
+    const handler = new KMeansClustering();
     const summary = await handler.predict(note['body']);
     console.log(`Summary: ${summary}`);
     setTimeout(() => createSummary(note, multiple, summary), 1000);
