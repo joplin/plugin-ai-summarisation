@@ -182,6 +182,10 @@ const baseConfig = {
 				use: 'ts-loader',
 				exclude: /node_modules/,
 			},
+			{
+				test: /\.node$/,
+				loader: "node-loader",
+			  },
 		],
 	},
 	optimization: {
@@ -204,6 +208,7 @@ const pluginConfig = { ...baseConfig, entry: './src/index.ts',
 			api: path.resolve(__dirname, 'api'),
 		},
 		fallback: moduleFallback,
+		
 		// JSON files can also be required from scripts so we include this.
 		// https://github.com/joplin/plugin-bibtex/pull/2
 		extensions: ['.js', '.tsx', '.ts', '.json'],

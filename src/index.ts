@@ -1,8 +1,10 @@
 import joplin from 'api';
+import { NoteDialog } from './ui/dialogs';
+import { NoteInfo } from './models/note';
+
 
 const fs = require('fs-extra');
 const path = require('path');
-const { loadPyodide, version } = require("pyodide");
 
 const { initNoteContextMenu } = require('./components/noteContextMenu');
 const { initEditorContextMenu } = require('./components/editorContextMenu')
@@ -11,25 +13,13 @@ const { initNotebookContextMenu } = require('./components/notebookContextMenu')
 
 joplin.plugins.register({
 	onStart: async function() {
-		initNoteContextMenu();
+		const noteDialog = new NoteDialog('SummarizeSingleNote');
+		noteDialog.registerDialog();
+
+		initNoteContextMenu(noteDialog);
 		initEditorContextMenu();
 		initNotebookContextMenu();
-
-		// let pyodide = await loadPyodide({
-		// 	indexURL: `${window.location.origin}/pyodide`,
-		// });
-		// console.log("HEY");
-		// await pyodide.loadPackage("micropip");
-		// const micropip = pyodide.pyimport("micropip");
-		// await micropip.install('snowballstemmer');
-		// pyodide.runPython(`
-		// import snowballstemmer
-		// stemmer = snowballstemmer.stemmer('english')
-		// print(stemmer.stemWords('go goes going gone'.split()))
-		// `);
 	},
-	
-
 });
 
 async function initWord2Vec() {

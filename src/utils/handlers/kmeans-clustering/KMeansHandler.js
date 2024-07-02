@@ -12,7 +12,7 @@ export class KMeansClustering extends AIHandler {
         `;
     }
 
-    predict(note, k=8) {
+    predict(note, k=6) {
         const { sentences, processedSentences } = preprocessNote(note); 
         const tfidf = getTFIDF(processedSentences);
         const sentenceVectors = this.vectorizeSentences(processedSentences, tfidf);
@@ -81,7 +81,7 @@ export class KMeansClustering extends AIHandler {
         return true;
     }
 
-    kmeans(sentenceVectors, k, maxIterations = 500) {
+    kmeans(sentenceVectors, k, maxIterations = 1000) {
         let centroids = this.initializeCentroids(sentenceVectors, k);
         let assignments = this.assignClusters(sentenceVectors, centroids);
         

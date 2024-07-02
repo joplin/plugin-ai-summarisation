@@ -23,7 +23,7 @@ export class LexRankHandler extends AIHandler {
         return { sentences, processedSentences };
     }
 
-    async predict(note, topN = 8) {
+    async predict(note, topN = 10) {
 
         const { sentences, processedSentences } = this.preprocessNote(note);
         const tf = this.computeTF(processedSentences);

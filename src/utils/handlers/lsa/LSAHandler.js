@@ -12,7 +12,7 @@ export class LSAHandler extends AIHandler {
         `;
     }
 
-    predict(note, topN = 8) {
+    predict(note, topN = 50) {
         const { sentences, processedSentences } = preprocessNote(note);
         const binaryMatrix = this.createBinaryMatrix(processedSentences);
         const { U, S, V } = this.constructSVD(binaryMatrix);
