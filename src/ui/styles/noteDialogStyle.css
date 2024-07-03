@@ -37,5 +37,9 @@
     flex-basis: 66.66%;
 
     height: 100%;
+}
+
+.summarized-note-content {
+    height: 100%;
     overflow-y: scroll;
 }

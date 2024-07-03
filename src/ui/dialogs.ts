@@ -2,6 +2,8 @@ import joplin from 'api';
 import { ButtonSpec, DialogResult } from 'api/types';
 import { NoteInfo } from 'src/models/note';
 
+import { LexRankHandler } from '../utils/handlers/lex-rank/LexRankHandler';
+
 abstract class Dialog {
     protected _dialog: any;
     protected _title: string;
@@ -21,6 +23,9 @@ export class NoteDialog extends Dialog {
     }
     
     private async generateDialogHtml(noteInfo: NoteInfo): Promise<string> {
+        const handler = new LexRankHandler();
+        const summary = await handler.predict(noteInfo.noteBody, 10);
+
         return `
             <div class="note-dialog">
                 <div class="note-summarize-config">
@@ -33,7 +38,9 @@ export class NoteDialog extends Dialog {
                 </div>
                 <div class="note-summarized-display">
                     <h2> Summarized Note </h2>
-                    ${noteInfo.noteBody}
+                    <div class="summarized-note-content">
+                        ${summary}
+                    </div>
                 </div>
             </div>
         `
@@ -42,7 +49,8 @@ export class NoteDialog extends Dialog {
     async registerDialog(buttons?: ButtonSpec[]) {
         this._dialog = await joplin.views.dialogs.create(`note_dialog`);
         console.log(`CREATED DIALOG: ${JSON.stringify(this._dialog)}`);
-        await joplin.views.dialogs.addScript(this._dialog, './ui/styles/webviewDialog.css');
+        await joplin.views.dialogs.addScript(this._dialog, './ui/styles/noteDialogStyle.css');
+        await joplin.views.dialogs.addScript(this._dialog, './ui/controllers/noteDialogController.js');
         if (buttons) {
             await joplin.views.dialogs.setButtons(this._dialog, buttons);
         }
