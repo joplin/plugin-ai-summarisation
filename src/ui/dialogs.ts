@@ -91,15 +91,15 @@ export class NoteDialog extends Dialog {
                             <div class="summary-length-radio-container">
                                 <div>
                                     <input type="radio" id="length-radio-six" name="summary-length-radio-buttons" value="6" checked>
-                                    <label for="length-radio-six">6 sentences</label><br>
+                                    <label for="length-radio-six">Short</label><br>
                                 </div>
                                 <div>
                                     <input type="radio" id="length-radio-eighteen" name="summary-length-radio-buttons" value="18">
-                                    <label for="length-radio-eighteen">18 sentences</label><br>
+                                    <label for="length-radio-eighteen">Medium</label><br>
                                 </div>
                                 <div>
                                     <input type="radio" id="length-radio-thirty" name="summary-length-radio-buttons" value="30">
-                                    <label for="length-radio-thirty">30 sentences</label>
+                                    <label for="length-radio-thirty">Long</label>
                                 </div>
                             </div>
                             <div class="summary-model-radio-container">

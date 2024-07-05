@@ -9,7 +9,7 @@ let currModel = "lexRank";
         .then((response) => response.json())
         .then((jsonData) => {
             summaries = jsonData;
-            document.getElementById('summarized-note-content').innerText = summaries[currModel][currLength] + "\n";
+            document.getElementById('summarized-note-content').innerText = summaries[currModel][currLength] + "\n" + "\n" + "\n";
         });
     } catch (err) {
         console.log(`Error displaying the length of the summary: ${err}`);
@@ -26,7 +26,7 @@ document.querySelectorAll('input[name="summary-length-radio-buttons"]').forEach(
             .then((response) => response.json())
             .then((jsonData) => {
                 summaries = jsonData;
-                document.getElementById('summarized-note-content').innerText = summaries[currModel][currLength] + "\n";
+                document.getElementById('summarized-note-content').innerText = summaries[currModel][currLength] + "\n" + "\n" + "\n";
             });
         } catch (err) {
             console.log(`Error displaying the length of the summary: ${err}`);
@@ -45,7 +45,7 @@ document.querySelectorAll('input[name="summary-model-radio-buttons"]').forEach((
             .then((response) => response.json())
             .then((jsonData) => {
                 summaries = jsonData;
-                document.getElementById('summarized-note-content').innerText = summaries[currModel][currLength] + "\n";
+                document.getElementById('summarized-note-content').innerText = summaries[currModel][currLength] + "\n" + "\n" + "\n";
             });
         } catch (err) {
             console.log(`Error displaying the length of the summary: ${err}`);
