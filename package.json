@@ -32,6 +32,7 @@
   "dependencies": {
     "change-case": "^5.4.4",
     "charm": "^1.0.2",
+    "electron-log": "^4.4.1",
     "mathjs": "^13.0.0",
     "mime": "^4.0.3",
     "natural": "^7.0.6",

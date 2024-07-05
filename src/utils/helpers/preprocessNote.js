@@ -1,7 +1,6 @@
 const natural = require('natural');
 
 function preprocessNote(note) {
-    console.log(`NOTE: ${note}`);
 
     const sentenceTokenizer = new natural.SentenceTokenizer();
     const wordTokenizer = new natural.TreebankWordTokenizer();
