@@ -41,11 +41,16 @@
 
 .summarized-note-content {
     max-height: 400px;
-    width: 100%;
+    width: 95%;
     overflow-y: scroll;
 }
 
 .summary-radio-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.note-title-container {
     display: flex;
     flex-direction: row;
 }

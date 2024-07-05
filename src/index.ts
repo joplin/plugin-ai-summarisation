@@ -2,9 +2,9 @@ import joplin from 'api';
 import { NoteDialog } from './ui/dialogs';
 import { NoteInfo } from './models/note';
 
-
 const fs = require('fs-extra');
 const path = require('path');
+const logger = require('electron-log');
 
 const { initNoteContextMenu } = require('./components/noteContextMenu');
 const { initEditorContextMenu } = require('./components/editorContextMenu')
@@ -19,6 +19,8 @@ joplin.plugins.register({
 		initNoteContextMenu(noteDialog);
 		initEditorContextMenu();
 		initNotebookContextMenu();
+
+		logger.info("Joplin AI Summarization plugin has been successfully initialized.")
 	},
 });
 

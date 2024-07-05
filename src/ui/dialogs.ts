@@ -86,7 +86,10 @@ export class NoteDialog extends Dialog {
             <form name="note-ai-summarization">
                 <div class="note-dialog" data-data-dir="${p}">
                     <div class="note-summarize-config">
-                        <h2 id="note-title"><div class="fas fa-book"</div> ${noteInfo.name} </h2>
+                        <div class="note-title-container">
+                            <h2><div class="fas fa-book"</div></h2>
+                            <h2 id="note-title">${noteInfo.name}</h2>
+                        </div>
                         <div class="summary-radio-container">
                             <div class="summary-length-radio-container">
                                 <div>
@@ -120,7 +123,8 @@ export class NoteDialog extends Dialog {
                     </div>
                     <div class="note-summarized-display">
                         <h2> Summarized Note </h2>
-                        <div class="summarized-note-content" id="summarized-note-content"></div>
+                        <textarea rows="20" name="summarized-note-content" class="summarized-note-content" id="summarized-note-content">
+                        </textarea>
                     </div>
                 </div>
             </form>

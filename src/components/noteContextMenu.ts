@@ -15,6 +15,10 @@ async function summarizeNoteContextMenu(note, multiple: boolean, noteDialog) {
     const noteInfo: NoteInfo = { "name": note['title'], "noteBody": note['body'] };
     const result: any = await noteDialog.openDialog(noteInfo);
 
+    console.log("-----")
+    console.log(`DIALOG RESULT: ${JSON.stringify(result)}`)
+    // console.log(`Get the summary: ${result.}`)
+
     setTimeout(() => createSummary(note, multiple, summary), 1000);
 }
 async function createSummary(note, multiple, summary) {
