@@ -6,7 +6,6 @@ import { LSAHandler } from '../utils/handlers/lsa/LSAHandler';
 import { KMeansClustering } from '../utils/handlers/kmeans-clustering/KMeansHandler';
 
 const path = require('path');
-const os = require('os'); 
 const fs = require('fs');
 
 const SummaryBot = require('summarybot');
@@ -34,7 +33,7 @@ export class NoteDialog extends Dialog {
         const dataDir = await joplin.plugins.dataDir();
         const p = path.join(dataDir, 'summaries_dialog.json');
         if (fs.existsSync(p)) {
-            console.log(`The file or directory at '${p}' exists.`);
+            logger.info(`The file or directory at '${p}' exists.`);
             await fs.unlink(p, (err) => {
                 if (err) {
                     logger.error(`Error deleting JSON file: ${err}`)
@@ -43,13 +42,15 @@ export class NoteDialog extends Dialog {
                 }
             });
         } else {
-            console.log(`The file or directory at '${p}' does not exist.`);
+            logger.info('LOOOL');
+            logger.info(`The file or directory at '${p}' does not exist.`);
         }
         
+        logger.info('Constructing summarizers...')
 
         const lexRankHandler = new LexRankHandler();
         const lsaHandler = new LSAHandler();
-        const kmeansClusteringHandler = new KMeansClustering()
+        const kmeansClusteringHandler = new KMeansClustering();
         const textRankHandler = new SummaryBot();
 
         const lexRank = {handler: lexRankHandler, name: "lexRank"};
@@ -62,6 +63,7 @@ export class NoteDialog extends Dialog {
         const lengthOptions = [6, 18, 30];
         for (const summarizer of summarizers) {
             const temp = {};
+            logger.info(`Start summarizing with ${summarizer["name"]}`);
             lengthOptions.forEach((nSentences) => {
                 if (summarizer["name"] === "textRank") {
                     temp[nSentences.toString()] = summarizer["handler"].run(noteInfo.noteBody, nSentences, false);
@@ -70,6 +72,7 @@ export class NoteDialog extends Dialog {
                 }
             })
             summariesJSON[summarizer["name"]] = temp;
+            logger.info(`Summarizing with ${summarizer["name"]} completed`);
         }
 
         const jsonString = JSON.stringify(summariesJSON, null, 2);
@@ -143,6 +146,7 @@ export class NoteDialog extends Dialog {
     async openDialog(noteInfo: NoteInfo) {
         const dialogHtml: string = await this.generateDialogHtml(noteInfo);
         await joplin.views.dialogs.setHtml(this._dialog, dialogHtml);
+        logger.info('Opening a note dialog...');
         const result: DialogResult = await joplin.views.dialogs.open(this._dialog);
         return result;
     }

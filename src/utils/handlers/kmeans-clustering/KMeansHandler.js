@@ -72,7 +72,7 @@ export class KMeansClustering extends AIHandler {
         return newCentroids.map((centroid, index) => centroid.map(value => value / counts[index]));
     }
 
-    hasConverged(oldCentroids, newCentroids, threshold = 0.0001) {
+    hasConverged(oldCentroids, newCentroids, threshold = 0.001) {
         for (let i = 0; i < oldCentroids.length; i++) {
             if (math.distance(oldCentroids[i], newCentroids[i]) > threshold) {
                 return false;
@@ -81,7 +81,7 @@ export class KMeansClustering extends AIHandler {
         return true;
     }
 
-    kmeans(sentenceVectors, k, maxIterations = 1000) {
+    kmeans(sentenceVectors, k, maxIterations = 500) {
         let centroids = this.initializeCentroids(sentenceVectors, k);
         let assignments = this.assignClusters(sentenceVectors, centroids);
         

@@ -6,20 +6,16 @@ import { KMeansClustering } from "../utils/handlers/kmeans-clustering/KMeansHand
 import { NoteDialog } from "src/ui/dialogs";
 import { NoteInfo } from "src/models/note";
 
+const logger = require('electron-log');
+
 const SummaryBot = require('summarybot');
 const userTriggered = true;
 
 async function summarizeNoteContextMenu(note, multiple: boolean, noteDialog) {
-    const handler = new LexRankHandler();
-    const summary = await handler.predict(note['body']);
     const noteInfo: NoteInfo = { "name": note['title'], "noteBody": note['body'] };
     const result: any = await noteDialog.openDialog(noteInfo);
 
-    console.log("-----")
-    console.log(`DIALOG RESULT: ${JSON.stringify(result)}`)
-    // console.log(`Get the summary: ${result.}`)
-
-    setTimeout(() => createSummary(note, multiple, summary), 1000);
+    setTimeout(() => createSummary(note, multiple, result['formData']['note-ai-summarization']['summarized-note-content']), 1000);
 }
 async function createSummary(note, multiple, summary) {
     const newBody = `## Summarization\n---\n${summary}\n\n---\n\n${note['body']}`
