@@ -29,20 +29,13 @@ export class KMeansClustering extends AIHandler {
         const sentenceVectors = this.vectorizeSentences(processedSentences, tfidf);
 
         let { centroids: centroidsShort, assignments: assignmentsShort } = this.kmeans(sentenceVectors, 6);
-        
-
         const summaryShort = this.extractSummary(sentences, sentenceVectors, assignmentsShort, centroidsShort);
-        logger.info(`Centroids SHORT: ${JSON.stringify(summaryShort)}`);
 
         let { centroids: centroidsMedium, assignments: assignmentsMedium } = this.kmeans(sentenceVectors, 10);
-        
         const summaryMedium = this.extractSummary(sentences, sentenceVectors, assignmentsMedium, centroidsMedium);
 
-        logger.info(`Centroids MEDIUM: ${JSON.stringify(summaryMedium)}`);
         let { centroids: centroidsLong, assignments: assignmentsLong } = this.kmeans(sentenceVectors, 14);
         const summaryLong = this.extractSummary(sentences, sentenceVectors, assignmentsLong, centroidsLong);
-        logger.info(`Centroids LONG: ${JSON.stringify(summaryLong)}`);
-
 
         return { summaryShort: summaryShort.join(' '), summaryMedium: summaryMedium.join(' '), summaryLong: summaryLong.join(' ') };
     }

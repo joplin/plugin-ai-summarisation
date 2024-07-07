@@ -1,14 +1,9 @@
 import joplin from "api";
 import { MenuItemLocation } from "api/types";
-import { LexRankHandler } from "../utils/handlers/lex-rank/LexRankHandler";
-import { LSAHandler } from "../utils/handlers/lsa/LSAHandler";
-import { KMeansClustering } from "../utils/handlers/kmeans-clustering/KMeansHandler";
 import { NoteDialog } from "src/ui/dialogs";
 import { NoteInfo } from "src/models/note";
 
 const logger = require('electron-log');
-
-const SummaryBot = require('summarybot');
 const userTriggered = true;
 
 async function summarizeNoteContextMenu(note, multiple: boolean, noteDialog) {

@@ -1,5 +1,5 @@
 import joplin from 'api';
-import { NoteDialog } from './ui/dialogs';
+import { NoteDialog, NotebookDialog } from './ui/dialogs';
 import { NoteInfo } from './models/note';
 
 const fs = require('fs-extra');
@@ -16,9 +16,12 @@ joplin.plugins.register({
 		const noteDialog = new NoteDialog('SummarizeSingleNote');
 		noteDialog.registerDialog();
 
+		const notebookDialog = new NotebookDialog('SummarizeNotebook');
+		notebookDialog.registerDialog();
+
 		initNoteContextMenu(noteDialog);
 		initEditorContextMenu();
-		initNotebookContextMenu();
+		initNotebookContextMenu(notebookDialog);
 
 		logger.info("Joplin AI Summarization plugin has been successfully initialized.")
 	},
