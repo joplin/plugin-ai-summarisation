@@ -22,6 +22,22 @@ export class LSAHandler extends AIHandler {
         return result;
     }
 
+    predictBatch(note) {
+        const { sentences, processedSentences } = preprocessNote(note);
+        const binaryMatrix = this.createBinaryMatrix(processedSentences);
+        const { U, S, V } = this.constructSVD(binaryMatrix);
+
+        const scoresShort = this.scoreSentences(U, S, sentences, 6);
+        const scorestMedium = this.scoreSentences(U, S, sentences, 18);
+        const scoresLong = this.scoreSentences(U, S, sentences, 30);
+
+        const summaryShort = scoresShort.map(item => item.sentence).join(' ');;
+        const summaryMedium = scorestMedium.map(item => item.sentence).join(' ');
+        const summaryLong = scoresLong.map(item => item.sentence).join(' ');
+
+        return { summaryShort: summaryShort, summaryMedium: summaryMedium, summaryLong: summaryLong }; 
+    }
+
     createBinaryMatrix(sentences) {
         const allWords = Array.from(new Set(sentences.flat()));
         const matrix = sentences.map(sentence => {

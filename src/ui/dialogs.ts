@@ -59,18 +59,25 @@ export class NoteDialog extends Dialog {
         const textRank = {handler: textRankHandler, name: "textRank"};
 
         const summariesJSON = {};
-        const summarizers = [lexRank, lsa, textRank];
+        const summarizers = [lexRank, lsa, textRank, kmeansClustering];
         const lengthOptions = [6, 18, 30];
         for (const summarizer of summarizers) {
             const temp = {};
             logger.info(`Start summarizing with ${summarizer["name"]}`);
-            lengthOptions.forEach((nSentences) => {
-                if (summarizer["name"] === "textRank") {
-                    temp[nSentences.toString()] = summarizer["handler"].run(noteInfo.noteBody, nSentences, false);
-                } else {
-                    temp[nSentences.toString()] = summarizer["handler"].predict(noteInfo.noteBody, nSentences);
-                }
-            })
+    
+            if (summarizer["name"] === "textRank") {
+                lengthOptions.forEach((nSentences) => {
+                    if (summarizer["name"] === "textRank") {
+                        temp[nSentences.toString()] = summarizer["handler"].run(noteInfo.noteBody, nSentences, false);
+                    }
+                })
+            } else {
+                const batchPredictions = summarizer["handler"].predictBatch(noteInfo.noteBody);
+                temp["6"] = batchPredictions["summaryShort"];
+                temp["18"] = batchPredictions["summaryMedium"];
+                temp["30"] = batchPredictions["summaryLong"];
+            } 
+    
             summariesJSON[summarizer["name"]] = temp;
             logger.info(`Summarizing with ${summarizer["name"]} completed`);
         }
@@ -120,6 +127,10 @@ export class NoteDialog extends Dialog {
                                 <div>
                                     <input type="radio" id="length-radio-thirty" name="summary-model-radio-buttons" value="textRank">
                                     <label for="length-radio-thirty">TextRank</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="length-radio-thirty" name="summary-model-radio-buttons" value="kmeans">
+                                    <label for="length-radio-thirty">KMeans Clustering</label>
                                 </div>
                             </div>
                         </div>

@@ -39,6 +39,26 @@ export class LexRankHandler extends AIHandler {
         return summary;   
     }
 
+    predictBatch(note) {
+        const { sentences, processedSentences } = this.preprocessNote(note);
+        const tf = this.computeTF(processedSentences);
+        const idf = this.computeIDF(processedSentences);
+        const tfidf = this.computeTFIDF(tf, idf);
+
+        const similarityMatrix = this.constructSimilarityMatrix(tfidf, processedSentences.length);
+        const scores = this.constructPageRank(similarityMatrix, processedSentences.length);
+
+        const topSentencesShort = this.rankSentences(scores, sentences, 6);
+        const topSentencesMedium = this.rankSentences(scores, sentences, 18);
+        const topSentencesLong = this.rankSentences(scores, sentences, 30);
+
+        const summaryShort = topSentencesShort.map(item => item.sentence).join(' ');
+        const summaryMedium = topSentencesMedium.map(item => item.sentence).join(' ');
+        const summaryLong = topSentencesLong.map(item => item.sentence).join(' ');
+
+        return { summaryShort: summaryShort, summaryMedium: summaryMedium, summaryLong: summaryLong }; 
+    }
+
     computeTF(processedSentences) {
         const tf = processedSentences.map(sentence => {
             const termFrequency = {};

@@ -3,6 +3,7 @@ import { preprocessNote } from  "../../helpers/preprocessNote";
 import { getTFIDF } from "../../helpers/constructTFIDF";
 
 const math = require('mathjs');
+const logger = require('electron-log');
 
 export class KMeansClustering extends AIHandler {
 
@@ -19,6 +20,31 @@ export class KMeansClustering extends AIHandler {
         const { centroids, assignments } = this.kmeans(sentenceVectors, k);
         const summary = this.extractSummary(sentences, sentenceVectors, assignments, centroids);
         return summary.join(' ');
+    }
+
+    predictBatch(note) {
+
+        const { sentences, processedSentences } = preprocessNote(note); 
+        const tfidf = getTFIDF(processedSentences);
+        const sentenceVectors = this.vectorizeSentences(processedSentences, tfidf);
+
+        let { centroids: centroidsShort, assignments: assignmentsShort } = this.kmeans(sentenceVectors, 6);
+        
+
+        const summaryShort = this.extractSummary(sentences, sentenceVectors, assignmentsShort, centroidsShort);
+        logger.info(`Centroids SHORT: ${JSON.stringify(summaryShort)}`);
+
+        let { centroids: centroidsMedium, assignments: assignmentsMedium } = this.kmeans(sentenceVectors, 10);
+        
+        const summaryMedium = this.extractSummary(sentences, sentenceVectors, assignmentsMedium, centroidsMedium);
+
+        logger.info(`Centroids MEDIUM: ${JSON.stringify(summaryMedium)}`);
+        let { centroids: centroidsLong, assignments: assignmentsLong } = this.kmeans(sentenceVectors, 14);
+        const summaryLong = this.extractSummary(sentences, sentenceVectors, assignmentsLong, centroidsLong);
+        logger.info(`Centroids LONG: ${JSON.stringify(summaryLong)}`);
+
+
+        return { summaryShort: summaryShort.join(' '), summaryMedium: summaryMedium.join(' '), summaryLong: summaryLong.join(' ') };
     }
 
     vectorizeSentences(processedSentences, tfidf) {
@@ -81,7 +107,7 @@ export class KMeansClustering extends AIHandler {
         return true;
     }
 
-    kmeans(sentenceVectors, k, maxIterations = 500) {
+    kmeans(sentenceVectors, k, maxIterations = 1000) {
         let centroids = this.initializeCentroids(sentenceVectors, k);
         let assignments = this.assignClusters(sentenceVectors, centroids);
         
