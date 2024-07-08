@@ -2,6 +2,7 @@ import joplin from "api";
 import { MenuItemLocation } from "api/types";
 import { NotebookDialog } from "../ui/dialogs";
 import { NotebookInfo } from "src/models/notebook";
+import { electronMassDependencies } from "mathjs";
 
 const SummaryBot = require('summarybot');
 const logger = require('electron-log');
@@ -90,9 +91,19 @@ async function initNotebookContextMenu(notebookDialog: NotebookDialog) {
             
             const currNotebook = await joplin.data.get(['folders', folderId], { fields: ['id', 'title'] });
             const notebookInfo: NotebookInfo = { "name": currNotebook['title'] };
-            notebookDialog.openDialog(notebookInfo);
-           
-            summarizeNotesRecursively(folderId, allNotes['items'], allNotebooks['items']);
+            const result = await notebookDialog.openDialog(notebookInfo);
+
+            const summarizeOption = result['formData']['note-ai-summarization']['summary-notebook-option'];
+
+            if (summarizeOption === "immediateChildrenNotes") {
+                logger.info('IMMEDIATE CHILDREN NOTES');
+                summarizeImmediateChildren(folderId, allNotes['items']);
+            } else if(summarizeOption === "allNotes") {
+                logger.info('ALL NOTES');
+                summarizeNotesRecursively(folderId, allNotes['items'], allNotebooks['items']);
+            } else {
+                logger.info('Work in progress');
+            }    
         }
     });
     await joplin.views.menuItems.create('ai.notebookCommandContextMenu', 'ai.notebookCommandContextMenu.textrank', MenuItemLocation.FolderContextMenu);

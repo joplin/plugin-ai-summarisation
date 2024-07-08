@@ -47,11 +47,14 @@
 
 .summary-radio-container {
     display: flex;
+    gap: 10px;
     flex-direction: row;
+    justify-content: center;
 }
 
 .note-title-container {
     display: flex;
     flex-direction: row;
     gap: 10px;
+    padding-bottom: 20px;
 }

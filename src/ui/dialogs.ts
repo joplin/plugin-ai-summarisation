@@ -215,19 +215,19 @@ export class NotebookDialog extends Dialog {
                                     <label for="length-radio-thirty">KMeans Clustering</label>
                                 </div>
                             </div>
-                            <div class="summary-model-notebook-container">
-                                <div>
-                                    <input type="radio" id="length-radio-six" name="summary-notebook-option" value="immediateChildrenNotes" checked>
-                                    <label for="length-radio-six">Summarize only notes that selected notebook has</label><br>
-                                </div>
-                                <div>
-                                    <input type="radio" id="length-radio-eighteen" name="summary-notebook-option" value="allNotes" >
-                                    <label for="length-radio-eighteen">Summarize all notes in a selected notebook</label><br>
-                                </div>
-                                <div>
-                                    <input type="radio" id="length-radio-eighteen" name="summary-notebook-option" value="customSelectNotes" >
-                                    <label for="length-radio-eighteen">Select notes to summarize</label><br>
-                                </div>
+                        </div>
+                        <div class="summary-model-notebook-container">
+                            <div>
+                                <input type="radio" id="length-radio-six" name="summary-notebook-option" value="immediateChildrenNotes" checked>
+                                <label for="length-radio-six">Summarize only notes that selected notebook has</label><br>
+                            </div>
+                            <div>
+                                <input type="radio" id="length-radio-eighteen" name="summary-notebook-option" value="allNotes" >
+                                <label for="length-radio-eighteen">Summarize all notes in a selected notebook</label><br>
+                            </div>
+                            <div>
+                                <input type="radio" id="length-radio-eighteen" name="summary-notebook-option" value="customSelectNotes" >
+                                <label for="length-radio-eighteen">Select notes to summarize (Work in progress)</label><br>
                             </div>
                         </div>
                     </div>

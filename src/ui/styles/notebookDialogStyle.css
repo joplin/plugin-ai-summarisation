@@ -48,10 +48,20 @@
 .summary-radio-container {
     display: flex;
     flex-direction: row;
+    gap: 5px;
+    padding-bottom: 10px;
 }
 
 .note-title-container {
     display: flex;
     flex-direction: row;
     gap: 10px;
+    padding-bottom: 20px;
+}
+
+.summary-model-notebook-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
 }
