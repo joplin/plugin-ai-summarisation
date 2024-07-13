@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-export function App() {
+export default function App() {
 
     return (
         <div className='summarization-ai-panel'>
