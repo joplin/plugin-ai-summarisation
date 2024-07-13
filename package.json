@@ -37,6 +37,8 @@
     "mime": "^4.0.3",
     "natural": "^7.0.6",
     "node-polyfill-webpack-plugin": "^4.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "summarybot": "^0.0.7",
     "svd-js": "^1.1.1"
   }

@@ -1,5 +1,6 @@
 import joplin from 'api';
 import { NoteDialog, NotebookDialog } from './ui/dialogs';
+import { SummarisationPanel } from './ui/panel';
 import { NoteInfo } from './models/note';
 
 const fs = require('fs-extra');
@@ -13,12 +14,19 @@ const { initNotebookContextMenu } = require('./components/notebookContextMenu')
 
 joplin.plugins.register({
 	onStart: async function() {
+
+		// Dialogs
 		const noteDialog = new NoteDialog('SummarizeSingleNote');
 		noteDialog.registerDialog();
 
 		const notebookDialog = new NotebookDialog('SummarizeNotebook');
 		notebookDialog.registerDialog();
 
+		// Panel
+		const panel = new SummarisationPanel();
+		panel.registerPanel();
+
+		// Content Menus
 		initNoteContextMenu(noteDialog);
 		initEditorContextMenu();
 		initNotebookContextMenu(notebookDialog);
