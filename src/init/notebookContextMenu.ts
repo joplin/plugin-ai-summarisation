@@ -2,7 +2,6 @@ import joplin from "api";
 import { MenuItemLocation } from "api/types";
 import { NotebookDialog } from "../ui/dialogs";
 import { NotebookInfo } from "src/models/notebook";
-import { electronMassDependencies } from "mathjs";
 
 const SummaryBot = require('summarybot');
 const logger = require('electron-log');
@@ -96,10 +95,8 @@ async function initNotebookContextMenu(notebookDialog: NotebookDialog) {
             const summarizeOption = result['formData']['note-ai-summarization']['summary-notebook-option'];
 
             if (summarizeOption === "immediateChildrenNotes") {
-                logger.info('IMMEDIATE CHILDREN NOTES');
                 summarizeImmediateChildren(folderId, allNotes['items']);
             } else if(summarizeOption === "allNotes") {
-                logger.info('ALL NOTES');
                 summarizeNotesRecursively(folderId, allNotes['items'], allNotebooks['items']);
             } else {
                 logger.info('Work in progress');

@@ -39,6 +39,7 @@
     "node-polyfill-webpack-plugin": "^4.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "styled-components": "^6.1.11",
     "summarybot": "^0.0.7",
     "svd-js": "^1.1.1"
   }
