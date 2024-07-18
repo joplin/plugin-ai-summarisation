@@ -1,9 +1,9 @@
 import * as React from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
-import { PiNotebookBold } from "react-icons/pi";
 import { GiNotebook } from "react-icons/gi";
 import { CgNotes } from "react-icons/cg";
-
+import { GoTriangleDown, GoTriangleRight } from "react-icons/go";
 
 interface NotebookContainerProps {
     level: number;
@@ -23,6 +23,21 @@ const NoteTitle = styled.div`
     cursor: pointer;
 `;
 
+const NoteElement = styled.div`
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+    margin: 6px 0 6px 20px;
+
+    cursor: pointer;
+    &:hover {
+        background-color: #f0f0f0;
+    }
+
+    font-size: 12px;
+`;
+
 interface NotebookProps {
     notebook: {
         id: number;
@@ -35,21 +50,32 @@ interface NotebookProps {
 }
 
 export default function NotebookTree({ notebook, level = 0 }: NotebookProps) {
+    const [expanded, setExpanded] = useState(true);
+
+    const toggleExpand = () => {
+        setExpanded(!expanded);
+    };
+
     return (
         <NotebookContainer level={level}>
-            <div className='notebook-title'>
+            <div className='notebook-title' onClick={toggleExpand}>
+                {expanded ? <GoTriangleDown /> : <GoTriangleRight />}
                 <GiNotebook />
                 <NotebookTitle>{notebook.title}</NotebookTitle>
             </div>
-            {notebook.notes.map(note => (
-                <p className='note-title'>
-                    <CgNotes />
-                    <NoteTitle key={note.id}>Note: {note.title}</NoteTitle>
-                </p>
-            ))}
-            {notebook.notebooks.map(subNotebook => (
-                <NotebookTree key={subNotebook.id} notebook={subNotebook} level={level + 1} />
-            ))}
+            {expanded && (
+                <>
+                    {notebook.notes.map(note => (
+                        <NoteElement key={note.id}>
+                            <CgNotes />
+                            <NoteTitle>Note: {note.title}</NoteTitle>
+                        </NoteElement>
+                    ))}
+                    {notebook.notebooks.map(subNotebook => (
+                        <NotebookTree key={subNotebook.id} notebook={subNotebook} level={level + 1} />
+                    ))}
+                </>
+            )}
         </NotebookContainer>
     );
-};
+}

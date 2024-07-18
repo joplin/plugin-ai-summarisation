@@ -18,5 +18,5 @@
     flex-direction: row;
     gap: 5px;
     align-items: center;
-    margin-left: 20px;
+    margin: 0 0 5px 20px;
 }
