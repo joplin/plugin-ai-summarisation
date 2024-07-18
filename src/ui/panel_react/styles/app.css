@@ -5,3 +5,18 @@
 .summarization-ai-body {
     color: green;
 }
+
+.notebook-title {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+}
+
+.note-title {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+    margin-left: 20px;
+}

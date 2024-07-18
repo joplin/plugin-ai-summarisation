@@ -10,7 +10,7 @@ async function initEditorContextMenu(editorDialog: EditorDialog) {
         name: "ai.editorCommandContextMenu.textrank",
         label: "Summarize the highlighted text",
         execute: async () => {
-            const selectedText = await joplin.commands.execute('selectedText');
+            const selectedText = (await joplin.commands.execute('selectedText') as string);
             const selectedNote = await joplin.workspace.selectedNote();
 
             logger.info(`Editor Context Menu SELECTED TEXT: ${JSON.stringify(selectedText)}`);

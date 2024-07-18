@@ -8,6 +8,7 @@ const AppContainer = styled.div`
     display: flex;
     flex-direction: column;
     padding: 20px;
+    height: 100%
 `;
 
 const Header = styled.div`
@@ -20,6 +21,8 @@ const Body = styled.div`
     display: flex;
     flex-direction: column;
     margin-top: 20px;
+    max-height: 400px;
+    overflow-y: scroll;
 `;
 
 

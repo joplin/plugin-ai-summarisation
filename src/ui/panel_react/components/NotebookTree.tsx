@@ -1,5 +1,9 @@
 import * as React from 'react';
 import styled from 'styled-components';
+import { PiNotebookBold } from "react-icons/pi";
+import { GiNotebook } from "react-icons/gi";
+import { CgNotes } from "react-icons/cg";
+
 
 interface NotebookContainerProps {
     level: number;
@@ -15,8 +19,7 @@ const NotebookTitle = styled.h2`
     cursor: pointer;
 `;
 
-const NoteTitle = styled.p`
-    margin: 0 0 5px 20px;
+const NoteTitle = styled.div`
     cursor: pointer;
 `;
 
@@ -34,9 +37,15 @@ interface NotebookProps {
 export default function NotebookTree({ notebook, level = 0 }: NotebookProps) {
     return (
         <NotebookContainer level={level}>
-            <NotebookTitle>{notebook.title}</NotebookTitle>
+            <div className='notebook-title'>
+                <GiNotebook />
+                <NotebookTitle>{notebook.title}</NotebookTitle>
+            </div>
             {notebook.notes.map(note => (
-                <NoteTitle key={note.id}>{note.title}</NoteTitle>
+                <p className='note-title'>
+                    <CgNotes />
+                    <NoteTitle key={note.id}>Note: {note.title}</NoteTitle>
+                </p>
             ))}
             {notebook.notebooks.map(subNotebook => (
                 <NotebookTree key={subNotebook.id} notebook={subNotebook} level={level + 1} />
