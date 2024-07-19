@@ -288,10 +288,6 @@ const pluginConfig = {
             ],
           },
         },
-        {
-          from: path.resolve(__dirname, "ai-service"),
-          to: path.resolve(__dirname, "dist/ai-service"),
-        },
       ],
     }),
     new PyodidePlugin(),
