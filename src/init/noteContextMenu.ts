@@ -2,16 +2,19 @@ import joplin from "api";
 import { MenuItemLocation } from "api/types";
 import { NoteDialog } from "src/ui/dialogs";
 import { NoteInfo } from "src/models/note";
+import { SummarisationPanel } from "src/ui/panel";
 
 const logger = require('electron-log');
 const userTriggered = true;
 
-async function summarizeNoteContextMenu(note, multiple: boolean, noteDialog) {
+async function summarizeNoteContextMenu(note, multiple: boolean, noteDialog, panel: SummarisationPanel) {
     const noteInfo: NoteInfo = { "name": note['title'], "noteBody": note['body'] };
     const result: any = await noteDialog.openDialog(noteInfo);
+    panel.sendSummaryData({ "summary": result['formData']['note-ai-summarization']['summarized-note-content'] })
 
     setTimeout(() => createSummary(note, multiple, result['formData']['note-ai-summarization']['summarized-note-content']), 1000);
 }
+
 async function createSummary(note, multiple, summary) {
     const newBody = `## Summarization\n---\n${summary}\n\n---\n\n${note['body']}`
     if (!multiple) {
@@ -35,7 +38,7 @@ async function createSummary(note, multiple, summary) {
     }
 }
 
-async function initNoteContextMenu(noteDialog: NoteDialog) {
+async function initNoteContextMenu(noteDialog: NoteDialog, panel: SummarisationPanel) {
 
     await joplin.commands.register({
         name: 'ai.noteListContextMenu.textrank',
@@ -43,11 +46,11 @@ async function initNoteContextMenu(noteDialog: NoteDialog) {
         execute: async (noteIds: string[] = null) => {
             if (noteIds.length === 1) {
                 const note = await joplin.data.get(['notes', noteIds[0]], { fields: ['id', 'title', 'body'] });
-                summarizeNoteContextMenu(note, false, noteDialog);
+                summarizeNoteContextMenu(note, false, noteDialog, panel);
             } else if (noteIds.length > 1) {
                 for (const noteId of noteIds) {
                     const note = await joplin.data.get(['notes', noteId], { fields: ['id', 'title', 'body'] });
-                    summarizeNoteContextMenu(note, true, noteDialog);
+                    summarizeNoteContextMenu(note, true, noteDialog, panel);
                 }
             }
         },

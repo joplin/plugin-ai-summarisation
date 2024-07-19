@@ -1,4 +1,4 @@
 export class NoteInfo {
-    name: string;
-    noteBody: string;
+  name: string;
+  noteBody: string;
 }

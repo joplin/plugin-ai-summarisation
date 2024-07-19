@@ -1,3 +1,1 @@
-export class SummarizationConfig {
-    
-}
+export class SummarizationConfig {}

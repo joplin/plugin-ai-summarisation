@@ -1,3 +1,3 @@
 export class NotebookInfo {
-    name: string;
+  name: string;
 }

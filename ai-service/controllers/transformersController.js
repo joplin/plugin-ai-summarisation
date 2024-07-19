@@ -1,5 +1,0 @@
-
-
-function predict(req, res) {
-
-}

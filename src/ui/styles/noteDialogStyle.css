@@ -1,60 +1,60 @@
 * {
-    color: var(--joplin-color);
-    background-color: var(--joplin-background-color);
-    margin: 0px;
-    border-radius: 3px;
-    font-family: Avenir, Arial, sans-serif;
+  color: var(--joplin-color);
+  background-color: var(--joplin-background-color);
+  margin: 0px;
+  border-radius: 3px;
+  font-family: Avenir, Arial, sans-serif;
 }
 
 #joplin-plugin-content {
-    width: 800px;
-    height: 400px;
-  }
+  width: 800px;
+  height: 400px;
+}
 
 #note-title {
-    padding-bottom: 10px;
+  padding-bottom: 10px;
 }
 
 .note-dialog {
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-    height: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  height: 100%;
 }
 
 .note-summarize-config {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex-basis: 33.33%;
-    height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-basis: 33.33%;
+  height: 100%;
 }
 
 .note-summarized-display {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex-basis: 66.66%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-basis: 66.66%;
 
-    height: 100%;
+  height: 100%;
 }
 
 .summarized-note-content {
-    max-height: 400px;
-    width: 95%;
-    overflow-y: scroll;
+  max-height: 400px;
+  width: 95%;
+  overflow-y: scroll;
 }
 
 .summary-radio-container {
-    display: flex;
-    gap: 10px;
-    flex-direction: row;
-    justify-content: center;
+  display: flex;
+  gap: 10px;
+  flex-direction: row;
+  justify-content: center;
 }
 
 .note-title-container {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    padding-bottom: 20px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  padding-bottom: 20px;
 }
