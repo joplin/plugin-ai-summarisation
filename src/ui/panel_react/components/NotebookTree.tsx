@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { GiNotebook } from "react-icons/gi";
 import { CgNotes } from "react-icons/cg";
 import { GoTriangleDown, GoTriangleRight } from "react-icons/go";
+import { useAppContext } from '../AppContext';
 
 interface NotebookContainerProps {
     level: number;
@@ -29,13 +30,10 @@ const NoteElement = styled.div`
     gap: 5px;
     align-items: center;
     margin: 6px 0 6px 20px;
-
     cursor: pointer;
     &:hover {
         background-color: #f0f0f0;
     }
-
-    font-size: 12px;
 `;
 
 interface NotebookProps {
@@ -45,15 +43,20 @@ interface NotebookProps {
         notes: { id: number; title: string }[];
         notebooks: NotebookProps['notebook'][];
     };
-    
     level?: number;
 }
 
 export default function NotebookTree({ notebook, level = 0 }: NotebookProps) {
     const [expanded, setExpanded] = useState(true);
+    const { setView, setSelectedNoteId } = useAppContext();
 
     const toggleExpand = () => {
         setExpanded(!expanded);
+    };
+
+    const handleNoteClick = (id: number) => {
+        setSelectedNoteId(id);
+        setView('noteDetails');
     };
 
     return (
@@ -64,9 +67,9 @@ export default function NotebookTree({ notebook, level = 0 }: NotebookProps) {
                 <NotebookTitle>{notebook.title}</NotebookTitle>
             </div>
             {expanded && (
-                <>
+                <div>
                     {notebook.notes.map(note => (
-                        <NoteElement key={note.id}>
+                        <NoteElement key={note.id} onClick={() => handleNoteClick(note.id)}>
                             <CgNotes />
                             <NoteTitle>Note: {note.title}</NoteTitle>
                         </NoteElement>
@@ -74,7 +77,7 @@ export default function NotebookTree({ notebook, level = 0 }: NotebookProps) {
                     {notebook.notebooks.map(subNotebook => (
                         <NotebookTree key={subNotebook.id} notebook={subNotebook} level={level + 1} />
                     ))}
-                </>
+                </div>
             )}
         </NotebookContainer>
     );

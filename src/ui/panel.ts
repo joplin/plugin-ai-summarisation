@@ -112,6 +112,10 @@ export class SummarisationPanel {
 
                 return { notebookTree };
             }
+            case "getNotes": {
+                const notes = await this.fetchAllNotes();
+                return { notes };
+            }
             default: {
             }
         }

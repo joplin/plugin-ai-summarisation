@@ -1,15 +1,15 @@
-import * as React from 'react'
+import * as React from 'react';
 import { render } from "react-dom";
+import { AppProvider } from './AppContext';
 
-import App from './app';
+import App from './app'
 
 function Root() {
-
     return (
-        <div>
+        <AppProvider>
             <App />
-        </div>
-    )
+        </AppProvider>
+    );
 }
 
 render(<Root />, document.getElementById("root"));

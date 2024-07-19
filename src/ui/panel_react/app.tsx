@@ -1,14 +1,16 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { useEffect, useState } from 'react';
-
+import { useAppContext } from './AppContext';
 import NotebookTree from './components/NotebookTree';
+import NoteDetails from './pages/NoteDetails';
+import MainHeader from './components/MainHeader';
+import NoteDetailsHeader from './components/NoteDetailsHeader';
 
 const AppContainer = styled.div`
     display: flex;
     flex-direction: column;
     padding: 20px;
-    height: 100%
+    height: 100%;
 `;
 
 const Header = styled.div`
@@ -25,11 +27,11 @@ const Body = styled.div`
     overflow-y: scroll;
 `;
 
-
 export default function App() {
-    const [notebookTree, setNotebookTree] = useState([]);
-    
-    useEffect(() => {
+    const { view, selectedNoteId } = useAppContext();
+    const [notebookTree, setNotebookTree] = React.useState([]);
+
+    React.useEffect(() => {
         async function fetchData() {
             const response = await webviewApi.postMessage({ type: 'initPanel' });
             setNotebookTree(response['notebookTree']);
@@ -40,14 +42,15 @@ export default function App() {
     return (
         <AppContainer>
             <Header>
-                <h1>Summarization AI</h1>
+                {view === 'home' ? <MainHeader /> : <NoteDetailsHeader />}
             </Header>
             <Body>
-                {Array.isArray(notebookTree) && notebookTree.map(notebook => {
-                    return (
-                        <NotebookTree key={notebook.id} notebook={notebook} />
-                    )
-                })}
+                {view === 'home' && Array.isArray(notebookTree) && notebookTree.map(notebook => (
+                    <NotebookTree key={notebook.id} notebook={notebook} />
+                ))}
+                {view === 'noteDetails' && selectedNoteId !== null && (
+                    <NoteDetails noteId={selectedNoteId} />
+                )}
             </Body>
         </AppContainer>
     );
