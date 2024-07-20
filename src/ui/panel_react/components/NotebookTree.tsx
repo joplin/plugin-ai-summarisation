@@ -24,16 +24,19 @@ const NoteTitle = styled.div`
   cursor: pointer;
 `;
 
-const NoteElement = styled.div`
+const NoteElement = styled.div<{ isSummarized: boolean }>`
   display: flex;
   flex-direction: row;
   gap: 5px;
   align-items: center;
   margin: 6px 0 6px 20px;
   cursor: pointer;
+  background-color: ${({ isSummarized }) =>
+    isSummarized ? "#d4edda" : "transparent"};
   &:hover {
     background-color: #f0f0f0;
   }
+  font-size: 14px;
 `;
 
 interface NotebookProps {
@@ -48,7 +51,7 @@ interface NotebookProps {
 
 export default function NotebookTree({ notebook, level = 0 }: NotebookProps) {
   const [expanded, setExpanded] = useState(true);
-  const { setView, setSelectedNoteId } = useAppContext();
+  const { summaryState, setView, setSelectedNoteId } = useAppContext();
 
   const toggleExpand = () => {
     setExpanded(!expanded);
@@ -69,7 +72,11 @@ export default function NotebookTree({ notebook, level = 0 }: NotebookProps) {
       {expanded && (
         <div>
           {notebook.notes.map((note) => (
-            <NoteElement key={note.id} onClick={() => handleNoteClick(note.id)}>
+            <NoteElement
+              key={note.id}
+              onClick={() => handleNoteClick(note.id)}
+              isSummarized={note.id in summaryState}
+            >
               <CgNotes />
               <NoteTitle>Note: {note.title}</NoteTitle>
             </NoteElement>

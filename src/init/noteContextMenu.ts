@@ -4,58 +4,93 @@ import { NoteDialog } from "src/ui/dialogs";
 import { NoteInfo } from "src/models/note";
 import { SummarisationPanel } from "src/ui/panel";
 
-const logger = require('electron-log');
+const logger = require("electron-log");
 const userTriggered = true;
 
-async function summarizeNoteContextMenu(note, multiple: boolean, noteDialog, panel: SummarisationPanel) {
-    const noteInfo: NoteInfo = { "name": note['title'], "noteBody": note['body'] };
-    const result: any = await noteDialog.openDialog(noteInfo);
+async function summarizeNoteContextMenu(
+  note,
+  multiple: boolean,
+  noteDialog,
+  panel: SummarisationPanel,
+) {
+  const noteInfo: NoteInfo = { name: note["title"], noteBody: note["body"] };
+  const result: any = await noteDialog.openDialog(noteInfo);
 
-    setTimeout(() => createSummary(note, multiple, result['formData']['note-ai-summarization']['summarized-note-content'], panel), 1000);
+  setTimeout(
+    () =>
+      createSummary(
+        note,
+        multiple,
+        result["formData"]["note-ai-summarization"]["summarized-note-content"],
+        panel,
+      ),
+    1000,
+  );
 }
 
-async function createSummary(note, multiple, summary, panel: SummarisationPanel) {
-    const newBody = `## Summarization\n---\n${summary}\n\n---\n\n${note['body']}`
-    if (!multiple) {
-        const selectedNote = await joplin.workspace.selectedNote();
-        const codeView = await joplin.settings.globalValue("editor.codeView");
+async function createSummary(
+  note,
+  multiple,
+  summary,
+  panel: SummarisationPanel,
+) {
+  const newBody = `## Summarization\n---\n${summary}\n\n---\n\n${note["body"]}`;
+  if (!multiple) {
+    const selectedNote = await joplin.workspace.selectedNote();
+    const codeView = await joplin.settings.globalValue("editor.codeView");
 
-        if (
-            selectedNote.id === note["id"] && userTriggered === true && codeView === true
-            ) {
-            await joplin.commands.execute("textSelectAll");
-            await joplin.commands.execute("replaceSelection", String(newBody));
-        } else if (selectedNote.id !== note["id"]) {
-            await joplin.data.put(['notes', note["id"]], null, { body: String(newBody) });
-        } else {
-            console.log('No summarization');
-        }
+    if (
+      selectedNote.id === note["id"] &&
+      userTriggered === true &&
+      codeView === true
+    ) {
+      await joplin.commands.execute("textSelectAll");
+      await joplin.commands.execute("replaceSelection", String(newBody));
+    } else if (selectedNote.id !== note["id"]) {
+      await joplin.data.put(["notes", note["id"]], null, {
+        body: String(newBody),
+      });
     } else {
-        await joplin.data.put(['notes', note["id"]], null, { body: String(newBody) });
+      console.log("No summarization");
     }
-    await panel.sendSummaryData({ "summary": summary, "noteId": note["id"] })
+  } else {
+    await joplin.data.put(["notes", note["id"]], null, {
+      body: String(newBody),
+    });
+  }
+  await panel.sendSummaryData({ summary: summary, noteId: note["id"] });
 }
 
-async function initNoteContextMenu(noteDialog: NoteDialog, panel: SummarisationPanel) {
-
-    await joplin.commands.register({
-        name: 'ai.noteListContextMenu.textrank',
-        label: 'Summarize the note',
-        execute: async (noteIds: string[] = null) => {
-            if (noteIds.length === 1) {
-                const note = await joplin.data.get(['notes', noteIds[0]], { fields: ['id', 'title', 'body'] });
-                summarizeNoteContextMenu(note, false, noteDialog, panel);
-            } else if (noteIds.length > 1) {
-                for (const noteId of noteIds) {
-                    const note = await joplin.data.get(['notes', noteId], { fields: ['id', 'title', 'body'] });
-                    summarizeNoteContextMenu(note, true, noteDialog, panel);
-                }
-            }
-        },
-    });
-    await joplin.views.menuItems.create('ai.noteListContextMenu', 'ai.noteListContextMenu.textrank', MenuItemLocation.NoteListContextMenu);
+async function initNoteContextMenu(
+  noteDialog: NoteDialog,
+  panel: SummarisationPanel,
+) {
+  await joplin.commands.register({
+    name: "ai.noteListContextMenu.textrank",
+    label: "Summarize the note",
+    execute: async (noteIds: string[] = null) => {
+      if (noteIds.length === 1) {
+        const note = await joplin.data.get(["notes", noteIds[0]], {
+          fields: ["id", "title", "body"],
+        });
+        summarizeNoteContextMenu(note, false, noteDialog, panel);
+      } else if (noteIds.length > 1) {
+        for (const noteId of noteIds) {
+          const note = await joplin.data.get(["notes", noteId], {
+            fields: ["id", "title", "body"],
+          });
+          summarizeNoteContextMenu(note, true, noteDialog, panel);
+        }
+      }
+    },
+  });
+  await joplin.views.menuItems.create(
+    "ai.noteListContextMenu",
+    "ai.noteListContextMenu.textrank",
+    MenuItemLocation.NoteListContextMenu,
+  );
 }
 
 module.exports = {
-    initNoteContextMenu,
+  initNoteContextMenu,
 };

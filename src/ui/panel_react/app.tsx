@@ -29,7 +29,8 @@ const Body = styled.div`
 `;
 
 export default function App() {
-  const { view, selectedNoteId, setView, setSelectedNoteId, dispatchSummary } = useAppContext();
+  const { view, selectedNoteId, setView, setSelectedNoteId, dispatchSummary } =
+    useAppContext();
   const [notebookTree, setNotebookTree] = React.useState([]);
 
   useEffect(() => {
@@ -39,13 +40,12 @@ export default function App() {
     }
     async function requestSummary() {
       const response = await webviewApi.postMessage({ type: "requestSummary" });
-      console.log(`Request summary response: ${JSON.stringify(response)}`);
       dispatchSummary({
         type: "addSummary",
         payload: {
-            noteId: response["noteId"],
-            summary: response["summary"]
-        }
+          noteId: response["noteId"],
+          summary: response["summary"],
+        },
       });
       setView("noteDetails");
       setSelectedNoteId(response["noteId"]);
@@ -54,7 +54,6 @@ export default function App() {
     fetchData();
     requestSummary();
   }, []);
-  
 
   return (
     <AppContainer>
