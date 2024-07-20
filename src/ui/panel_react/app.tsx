@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
 import { useAppContext } from "./AppContext";
 import NotebookTree from "./components/NotebookTree";
@@ -28,10 +29,10 @@ const Body = styled.div`
 `;
 
 export default function App() {
-  const { view, selectedNoteId } = useAppContext();
+  const { view, selectedNoteId, setView, setSelectedNoteId, dispatchSummary } = useAppContext();
   const [notebookTree, setNotebookTree] = React.useState([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     async function fetchData() {
       const response = await webviewApi.postMessage({ type: "initPanel" });
       setNotebookTree(response["notebookTree"]);
@@ -39,6 +40,16 @@ export default function App() {
     async function requestSummary() {
       const response = await webviewApi.postMessage({ type: "requestSummary" });
       console.log(`Request summary response: ${JSON.stringify(response)}`);
+      dispatchSummary({
+        type: "addSummary",
+        payload: {
+            noteId: response["noteId"],
+            summary: response["summary"]
+        }
+      })
+      setView("noteDetails");
+      setSelectedNoteId(response["noteId"]);
+      requestSummary();
     }
     fetchData();
     requestSummary();

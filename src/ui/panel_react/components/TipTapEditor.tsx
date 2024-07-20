@@ -6,6 +6,7 @@ import {
   BubbleMenu,
 } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import Blockquote from '@tiptap/extension-blockquote'
 
 interface TiptapEditorProps {
   content: string;
@@ -17,8 +18,14 @@ const TiptapEditor: React.FC<TiptapEditorProps> = ({
   onContentChange,
 }) => {
   const editor = useEditor({
-    extensions: [StarterKit],
-    content,
+    extensions: [StarterKit, Blockquote],
+    content:`
+        <blockquote>
+            Click on the summary text to edit, change font style, etc.
+        </blockquote>
+        
+        ${content}
+    `,
     onUpdate: ({ editor }) => {
       onContentChange(editor.getHTML());
     },

@@ -1,12 +1,8 @@
 import * as React from "react";
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, useReducer, Reducer, ReactNode } from "react";
+import { summaryReducer } from "./reducers/summaryReducer";
+import { AppState } from "./models/AppState";
 
-interface AppState {
-  view: "home" | "noteDetails";
-  selectedNoteId: number | null;
-  setView: (view: "home" | "noteDetails") => void;
-  setSelectedNoteId: (id: number | null) => void;
-}
 
 const AppContext = createContext<AppState | undefined>(undefined);
 
@@ -21,10 +17,11 @@ export const useAppContext = () => {
 export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [view, setView] = useState<"home" | "noteDetails">("home");
   const [selectedNoteId, setSelectedNoteId] = useState<number | null>(null);
+  const [summaryState, dispatchSummary] = useReducer(summaryReducer, {})
 
   return (
     <AppContext.Provider
-      value={{ view, setView, selectedNoteId, setSelectedNoteId }}
+      value={{ view, setView, selectedNoteId, setSelectedNoteId, summaryState, dispatchSummary }}
     >
       {children}
     </AppContext.Provider>

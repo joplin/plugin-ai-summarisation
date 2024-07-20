@@ -10,21 +10,18 @@ const userTriggered = true;
 async function summarizeNoteContextMenu(note, multiple: boolean, noteDialog, panel: SummarisationPanel) {
     const noteInfo: NoteInfo = { "name": note['title'], "noteBody": note['body'] };
     const result: any = await noteDialog.openDialog(noteInfo);
-    panel.sendSummaryData({ "summary": result['formData']['note-ai-summarization']['summarized-note-content'] })
 
-    setTimeout(() => createSummary(note, multiple, result['formData']['note-ai-summarization']['summarized-note-content']), 1000);
+    setTimeout(() => createSummary(note, multiple, result['formData']['note-ai-summarization']['summarized-note-content'], panel), 1000);
 }
 
-async function createSummary(note, multiple, summary) {
+async function createSummary(note, multiple, summary, panel: SummarisationPanel) {
     const newBody = `## Summarization\n---\n${summary}\n\n---\n\n${note['body']}`
     if (!multiple) {
         const selectedNote = await joplin.workspace.selectedNote();
         const codeView = await joplin.settings.globalValue("editor.codeView");
-        const noteVisiblePanes = await joplin.settings.globalValue("noteVisiblePanes");
+
         if (
-            selectedNote.id === note["id"] &&
-            codeView === true &&
-            (noteVisiblePanes === "viewer" || userTriggered === true)
+            selectedNote.id === note["id"] && userTriggered === true && codeView === true
             ) {
             await joplin.commands.execute("textSelectAll");
             await joplin.commands.execute("replaceSelection", String(newBody));
@@ -36,6 +33,7 @@ async function createSummary(note, multiple, summary) {
     } else {
         await joplin.data.put(['notes', note["id"]], null, { body: String(newBody) });
     }
+    await panel.sendSummaryData({ "summary": summary, "noteId": note["id"] })
 }
 
 async function initNoteContextMenu(noteDialog: NoteDialog, panel: SummarisationPanel) {

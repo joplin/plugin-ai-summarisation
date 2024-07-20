@@ -31,6 +31,7 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
+    "@tiptap/extension-blockquote": "^2.5.4",
     "@tiptap/pm": "^2.5.4",
     "@tiptap/react": "^2.5.4",
     "@tiptap/starter-kit": "^2.5.4",

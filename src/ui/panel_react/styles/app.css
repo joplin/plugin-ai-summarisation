@@ -21,6 +21,16 @@
   margin: 0 0 5px 20px;
 }
 
+.tiptap {
+    font-size: medium;
+}
+
+.tiptap blockquote {
+    border-left: 3px solid grey;
+    margin: 1.5rem 0;
+    padding-left: 1rem;
+}
+
 /* Bubble menu */
 .bubble-menu {
   background-color: red;
