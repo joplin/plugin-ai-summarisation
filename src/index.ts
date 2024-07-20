@@ -24,7 +24,8 @@ joplin.plugins.register({
 
     // Panel
     const panel = new SummarisationPanel();
-    panel.registerPanel();
+    await panel.registerPanel();
+    await panel.sendSummaryObjectsData();
 
     // Content Menus
     initNoteContextMenu(noteDialog, panel);

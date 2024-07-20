@@ -15,6 +15,7 @@ const AppContainer = styled.div`
 `;
 
 const Header = styled.div`
+  border-radius: 20px;
   background-color: #f5f5f5;
   padding: 10px;
   text-align: center;
@@ -29,7 +30,7 @@ const Body = styled.div`
 `;
 
 export default function App() {
-  const { view, selectedNoteId, setView, setSelectedNoteId, dispatchSummary } =
+  const { view, selectedNoteId, summaryState, setView, setSelectedNoteId, dispatchSummary } =
     useAppContext();
   const [notebookTree, setNotebookTree] = React.useState([]);
 
@@ -37,6 +38,18 @@ export default function App() {
     async function fetchData() {
       const response = await webviewApi.postMessage({ type: "initPanel" });
       setNotebookTree(response["notebookTree"]);
+    }
+    async function fetchSummaryObjects() {
+      const response = await webviewApi.postMessage({ type: "requestSummaryObjects" });
+      for( const summaryObj of response["summaryObjects"]) {
+        dispatchSummary({
+          type: "addSummary",
+          payload: {
+            noteId: summaryObj["noteId"],
+            summary: summaryObj["summary"],
+          },
+        });
+      }
     }
     async function requestSummary() {
       const response = await webviewApi.postMessage({ type: "requestSummary" });
@@ -52,13 +65,14 @@ export default function App() {
       requestSummary();
     }
     fetchData();
+    fetchSummaryObjects();
     requestSummary();
   }, []);
 
   return (
     <AppContainer>
       <Header>
-        {view === "home" ? <MainHeader /> : <NoteDetailsHeader />}
+        {view === "home" ?  <MainHeader /> : selectedNoteId in summaryState ? <NoteDetailsHeader crafting={false} /> : <NoteDetailsHeader crafting={true} />}
       </Header>
       <Body>
         {view === "home" &&

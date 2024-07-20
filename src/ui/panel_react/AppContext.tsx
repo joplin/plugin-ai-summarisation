@@ -4,7 +4,6 @@ import {
   useContext,
   useState,
   useReducer,
-  Reducer,
   ReactNode,
 } from "react";
 import { summaryReducer } from "./reducers/summaryReducer";

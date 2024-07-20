@@ -1,6 +1,7 @@
 import joplin from "api";
 import type { Message } from "./msgTypes";
 import { resolve } from "path";
+import { ModelType } from "api/types";
 
 const fs = require("fs-extra");
 const logger = require("electron-log");
@@ -8,11 +9,13 @@ const logger = require("electron-log");
 export class SummarisationPanel {
   public panelInstance;
   private sendSummary;
+  private sendSummaryObjects;
   private sendSelectedNoteId;
 
   constructor() {
     this.handleMessage = this.handleMessage.bind(this);
     this.sendSummary = null;
+    this.sendSummaryObjects = null;
     this.sendSelectedNoteId = null;
   }
 
@@ -90,11 +93,12 @@ export class SummarisationPanel {
         }
       });
 
-      notes.forEach((note) => {
+      for(const note of notes) {
         if (note["parent_id"] === currNotebookLevel["id"]) {
           currNotebookLevel["notes"].push(note);
         }
-      });
+      }
+
       this.constructNotebookTree(
         notebooks,
         notes,
@@ -106,12 +110,26 @@ export class SummarisationPanel {
   public async sendSummaryData(summaryObj) {
     if (this.sendSummary) {
       this.sendSummary(summaryObj);
+      await joplin.data.userDataSet(ModelType.Note, summaryObj["noteId"], "summaryObj", { summary: summaryObj["summary"], noteId: summaryObj["noteId"] });
       this.sendSummary = null;
     } else {
       logger.error(
         "resolve() Promise object not found for sendSummaryData message type",
       );
     }
+  }
+
+  public async sendSummaryObjectsData() {
+    const summaryObjects = [];
+    const notes = await this.fetchAllNotes();
+
+    for(const note of notes) {
+      const summaryObj = await joplin.data.userDataGet(ModelType.Note, note["id"], "summaryObj");
+      if(summaryObj !== undefined) {
+        summaryObjects.push(summaryObj);
+      }
+    }
+    this.sendSummaryObjects({ summaryObjects: summaryObjects })
   }
 
   private async handleMessage(msg: Message) {
@@ -140,9 +158,20 @@ export class SummarisationPanel {
 
         return { notebookTree };
       }
+      case "requestSummaryObjects": {
+        return new Promise((resolve) => {
+          this.sendSummaryObjects = resolve;
+        });
+      }
       case "getNotes": {
         const notes = await this.fetchAllNotes();
         return { notes };
+      }
+      case "getSummary": {
+
+      }
+      case "predictSummary": {
+
       }
       case "requestSummary": {
         return new Promise((resolve) => {

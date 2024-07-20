@@ -15,21 +15,25 @@ import Paragraph from "@tiptap/extension-paragraph";
 interface TiptapEditorProps {
   content: string;
   onContentChange: (content: string) => void;
+  crafting: boolean;
 }
 
 const TiptapEditor: React.FC<TiptapEditorProps> = ({
   content,
   onContentChange,
+  crafting,
 }) => {
   const editor = useEditor({
     extensions: [StarterKit, Document, Paragraph, Blockquote, TextStyle, Color],
-    content: `
+    content: (!crafting) ?`
     <blockquote>
         <p><span style="color: #ffaa00">
             Click on the summary text to edit. You can delete this blockquote.
         </span></p>
     </blockquote>
     
+    ${content}
+    ` : `
     ${content}
     `,
     onUpdate: ({ editor }) => {

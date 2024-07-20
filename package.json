@@ -31,6 +31,9 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
+    "@chakra-ui/react": "^2.8.2",
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^11.13.0",
     "@tiptap/extension-blockquote": "^2.5.4",
     "@tiptap/extension-color": "^2.5.4",
     "@tiptap/extension-text-style": "^2.5.4",
@@ -40,6 +43,7 @@
     "change-case": "^5.4.4",
     "charm": "^1.0.2",
     "electron-log": "^4.4.1",
+    "framer-motion": "^11.3.8",
     "mathjs": "^13.0.0",
     "mime": "^4.0.3",
     "natural": "^7.0.6",

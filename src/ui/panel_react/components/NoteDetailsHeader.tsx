@@ -15,7 +15,14 @@ const BackButton = styled.div`
   }
 `;
 
-export default function NoteDetailsHeader() {
+const NoteDetailsTitle = styled.h1`
+  position: relative;
+  top: -20px;
+  font-size: 28px;
+  font-weight: 600;
+`
+
+export default function NoteDetailsHeader({ crafting }) {
   const { setView, setSelectedNoteId } = useAppContext();
 
   const handleBackClick = () => {
@@ -29,7 +36,7 @@ export default function NoteDetailsHeader() {
         <IoArrowBackCircle size={24} />
         <span>Back to Home</span>
       </BackButton>
-      <h1>Note Details</h1>
+      <NoteDetailsTitle>{crafting ? "Craft your summary!" : "Summary"}</NoteDetailsTitle>
     </div>
   );
 }

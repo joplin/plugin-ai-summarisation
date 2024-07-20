@@ -58,7 +58,7 @@ async function createSummary(
       body: String(newBody),
     });
   }
-  await panel.sendSummaryData({ summary: summary, noteId: note["id"] });
+  await panel.sendSummaryData({ summary: summary, noteId: note["id"], noteTitle: note["title"] });
 }
 
 async function initNoteContextMenu(

@@ -10,6 +10,14 @@ export interface GetSummary {
   type: "getSummary";
 }
 
+export interface PredictSummary {
+  type: "predictSummary";
+}
+
+export interface RequestSummaryObjects {
+  type: "requestSummaryObjects";
+}
+
 export interface RequestSummary {
   type: "requestSummary";
 }
@@ -22,5 +30,7 @@ export type Message =
   | InitPanel
   | GetNotes
   | GetSummary
+  | RequestSummaryObjects
+  | PredictSummary
   | RequestSummary
   | RequestSelectedNoteId;

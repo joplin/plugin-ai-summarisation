@@ -15,9 +15,10 @@ const NotebookContainer = styled.div<NotebookContainerProps>`
   margin-bottom: 10px;
 `;
 
-const NotebookTitle = styled.h2`
+const NotebookTitle = styled.div`
   margin: 0;
-  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
 `;
 
 const NoteTitle = styled.div`
@@ -36,7 +37,7 @@ const NoteElement = styled.div<{ isSummarized: boolean }>`
   &:hover {
     background-color: #f0f0f0;
   }
-  font-size: 14px;
+  font-size: 12px;
 `;
 
 interface NotebookProps {
