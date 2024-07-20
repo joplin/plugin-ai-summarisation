@@ -46,7 +46,7 @@ export default function App() {
             noteId: response["noteId"],
             summary: response["summary"]
         }
-      })
+      });
       setView("noteDetails");
       setSelectedNoteId(response["noteId"]);
       requestSummary();
@@ -54,6 +54,7 @@ export default function App() {
     fetchData();
     requestSummary();
   }, []);
+  
 
   return (
     <AppContainer>
@@ -67,7 +68,7 @@ export default function App() {
             <NotebookTree key={notebook.id} notebook={notebook} />
           ))}
         {view === "noteDetails" && selectedNoteId !== null && (
-          <NoteDetails noteId={selectedNoteId} />
+          <NoteDetails key={selectedNoteId} />
         )}
       </Body>
     </AppContainer>

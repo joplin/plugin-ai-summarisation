@@ -5,8 +5,12 @@ import {
   FloatingMenu,
   BubbleMenu,
 } from "@tiptap/react";
+import { Color } from '@tiptap/extension-color'
+import TextStyle from '@tiptap/extension-text-style'
 import StarterKit from "@tiptap/starter-kit";
 import Blockquote from '@tiptap/extension-blockquote'
+import Document from '@tiptap/extension-document'
+import Paragraph from '@tiptap/extension-paragraph'
 
 interface TiptapEditorProps {
   content: string;
@@ -18,13 +22,15 @@ const TiptapEditor: React.FC<TiptapEditorProps> = ({
   onContentChange,
 }) => {
   const editor = useEditor({
-    extensions: [StarterKit, Blockquote],
+    extensions: [StarterKit, Document, Paragraph, Blockquote, TextStyle, Color],
     content:`
         <blockquote>
-            Click on the summary text to edit, change font style, etc.
+            <p><span style="color: #ffaa00">
+                Click on the summary text to edit, change font style, etc.
+            </span></p>
         </blockquote>
-        
-        ${content}
+    
+    ${content}
     `,
     onUpdate: ({ editor }) => {
       onContentChange(editor.getHTML());
