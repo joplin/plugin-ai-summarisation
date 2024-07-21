@@ -126,8 +126,6 @@ export class SummarisationPanel {
     for(const note of notes) {
       const summaryObj = await joplin.data.userDataGet(ModelType.Note, note["id"], "summaryObj");
       if(summaryObj !== undefined && summaryObj !== null) {
-        console.log(`NOTE ID (sendSummaryObjectsData): ${note["id"]}`)
-        console.log(`FOR LOOP SUMMARY OBJECT IN PANEL: ${JSON.stringify(summaryObj)}`);
         summaryObjects.push(summaryObj);
       }
     }
@@ -166,13 +164,6 @@ export class SummarisationPanel {
         });
       }
       case "updateSummaryHTML": {
-        console.log(`IN PANEL (updateSummaryHTML): ${JSON.stringify(msg)}`);
-        console.log(`NOTE ID = IN PANEL (updateSummaryHTML): ${console.log(msg.nodeId)}`);
-
-        const summaryObj = await joplin.data.userDataGet(ModelType.Note, msg.nodeId, "summaryObj");
-
-        console.log(`SUMMARY OBJECT - IN PANEL (updateSummaryHTML): ${JSON.stringify(summaryObj)}`);
-
         await joplin.data.userDataSet(ModelType.Note, msg.nodeId, "summaryObj", { summary: msg.summaryHTML, noteId: msg.nodeId });
       }
       case "getNotes": {

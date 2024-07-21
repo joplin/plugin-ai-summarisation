@@ -17,6 +17,18 @@ export const summaryReducer = (
         [noteId]: summaryObj,
       };
     }
+    case "updateSummary": {
+      const { noteId, summary } = action.payload;
+      if(noteId in state) {
+        return {
+          ...state,
+          [noteId]: {
+            ...state[noteId],
+            summary: summary,
+          }
+        }
+      }
+    }
     default:
       return state;
   }

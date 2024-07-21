@@ -32,9 +32,10 @@ const AlgorithmRadioGroup = styled.div`
 `
 
 export default function NoteDetails() {
-  const { summaryState, selectedNoteId } = useAppContext();
+  const { summaryState, dispatchSummary, selectedNoteId } = useAppContext();
   const [editedContent, setEditedContent] = useState("");
-  const [value, setValue] = React.useState('1')
+  const [length, setLength] = useState('short');
+  const [algorithm, setAlgorithm] = useState('');
 
   const handleContentChange = (content: string) => {
     setEditedContent(content);
@@ -54,7 +55,7 @@ export default function NoteDetails() {
           </div>
           <LengthRadioGroup>
             <h3 style={{fontSize: "15px", fontWeight: "600"}}>Length:</h3>
-            <RadioGroup onChange={setValue} value={value}>
+            <RadioGroup onChange={setLength} value={length}>
                 <Stack direction='row'>
                   <Radio size='sm' value='1'>Short</Radio>
                   <Radio size='sm' value='2'>Medium</Radio>
@@ -65,7 +66,7 @@ export default function NoteDetails() {
 
           <AlgorithmRadioGroup>
             <h3 style={{fontSize: "15px", fontWeight: "600"}}>Algorithms:</h3>
-            <RadioGroup onChange={setValue} value={value}>
+            <RadioGroup onChange={setAlgorithm} value={algorithm}>
                 <Stack direction='row'>
                   <Radio size='sm' value='1'>LexRank</Radio>
                   <Radio size='sm' value='2'>TextRank</Radio>
@@ -81,6 +82,7 @@ export default function NoteDetails() {
             onContentChange={handleContentChange}
             crafting={true}
             selectedNoteId={selectedNoteId}
+            dispatchSummary={dispatchSummary}
           />
         </SummarizationFormContainer>
       </NoteDetailsContainer>
@@ -95,6 +97,7 @@ export default function NoteDetails() {
         onContentChange={handleContentChange}
         crafting={false}
         selectedNoteId={selectedNoteId}
+        dispatchSummary={dispatchSummary}
       />
     </NoteDetailsContainer>
   );
