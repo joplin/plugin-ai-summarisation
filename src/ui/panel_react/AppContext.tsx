@@ -21,7 +21,7 @@ export const useAppContext = () => {
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [view, setView] = useState<"home" | "noteDetails">("home");
-  const [selectedNoteId, setSelectedNoteId] = useState<number | null>(null);
+  const [selectedNoteId, setSelectedNoteId] = useState<string| null>(null);
   const [summaryState, dispatchSummary] = useReducer(summaryReducer, {});
 
   return (

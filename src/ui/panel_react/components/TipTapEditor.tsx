@@ -16,12 +16,14 @@ interface TiptapEditorProps {
   content: string;
   onContentChange: (content: string) => void;
   crafting: boolean;
+  selectedNoteId: string;
 }
 
 const TiptapEditor: React.FC<TiptapEditorProps> = ({
   content,
   onContentChange,
   crafting,
+  selectedNoteId,
 }) => {
   const editor = useEditor({
     extensions: [StarterKit, Document, Paragraph, Blockquote, TextStyle, Color],
@@ -38,6 +40,7 @@ const TiptapEditor: React.FC<TiptapEditorProps> = ({
     `,
     onUpdate: ({ editor }) => {
       onContentChange(editor.getHTML());
+      webviewApi.postMessage({ type: "updateSummaryHTML", summaryHTML: String(editor.getHTML()), nodeId: selectedNoteId })
     },
   });
 

@@ -44,7 +44,7 @@ interface NotebookProps {
   notebook: {
     id: number;
     title: string;
-    notes: { id: number; title: string }[];
+    notes: { id: string; title: string }[];
     notebooks: NotebookProps["notebook"][];
   };
   level?: number;
@@ -58,7 +58,7 @@ export default function NotebookTree({ notebook, level = 0 }: NotebookProps) {
     setExpanded(!expanded);
   };
 
-  const handleNoteClick = (id: number) => {
+  const handleNoteClick = (id: string) => {
     setSelectedNoteId(id);
     setView("noteDetails");
   };

@@ -10,6 +10,13 @@ export interface GetSummary {
   type: "getSummary";
 }
 
+export interface UpdateSummaryHTML {
+  type: "updateSummaryHTML";
+  summaryHTML: string;
+  nodeId: string;
+
+}
+
 export interface PredictSummary {
   type: "predictSummary";
 }
@@ -30,6 +37,7 @@ export type Message =
   | InitPanel
   | GetNotes
   | GetSummary
+  | UpdateSummaryHTML
   | RequestSummaryObjects
   | PredictSummary
   | RequestSummary

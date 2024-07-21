@@ -80,6 +80,7 @@ export default function NoteDetails() {
             content={"lol"}
             onContentChange={handleContentChange}
             crafting={true}
+            selectedNoteId={selectedNoteId}
           />
         </SummarizationFormContainer>
       </NoteDetailsContainer>
@@ -93,6 +94,7 @@ export default function NoteDetails() {
         content={displaySummary()}
         onContentChange={handleContentChange}
         crafting={false}
+        selectedNoteId={selectedNoteId}
       />
     </NoteDetailsContainer>
   );
