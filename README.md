@@ -1,8 +1,12 @@
 # 🤖 Joplin AI - Summarisation
 
-#### By Ton Hoang Nguyen (Bill) 🧑‍💻: https://github.com/HahaBill
+#### a. By Ton Hoang Nguyen (Bill) 🧑‍💻: https://github.com/HahaBill
 
-#### Google Summer of Code 2024: https://summerofcode.withgoogle.com/programs/2024/projects/Ble8LKDb
+#### b. Google Summer of Code 2024: https://summerofcode.withgoogle.com/programs/2024/projects/Ble8LKDb
+
+#### c. Project Website: https://discourse.joplinapp.org/c/gsoc-projects/summarize-ai/35
+
+<br>
 
 ## 1. Introduction
 
