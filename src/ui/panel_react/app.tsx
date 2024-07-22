@@ -30,8 +30,14 @@ const Body = styled.div`
 `;
 
 export default function App() {
-  const { view, selectedNoteId, summaryState, setView, setSelectedNoteId, dispatchSummary } =
-    useAppContext();
+  const {
+    view,
+    selectedNoteId,
+    summaryState,
+    setView,
+    setSelectedNoteId,
+    dispatchSummary,
+  } = useAppContext();
   const [notebookTree, setNotebookTree] = React.useState([]);
 
   useEffect(() => {
@@ -40,15 +46,19 @@ export default function App() {
       setNotebookTree(response["notebookTree"]);
     }
     async function fetchSummaryObjects() {
-      const response = await webviewApi.postMessage({ type: "requestSummaryObjects" });
-      for( const summaryObj of response["summaryObjects"]) {
-        dispatchSummary({
-          type: "addSummary",
-          payload: {
-            noteId: summaryObj["noteId"],
-            summary: summaryObj["summary"],
-          },
-        });
+      const response = await webviewApi.postMessage({
+        type: "requestSummaryObjects",
+      });
+      for (const summaryObj of response["summaryObjects"]) {
+        if (!(summaryObj["noteId"] in summaryState)) {
+          dispatchSummary({
+            type: "addSummary",
+            payload: {
+              noteId: summaryObj["noteId"],
+              summary: summaryObj["summary"],
+            },
+          });
+        }
       }
     }
     async function requestSummary() {
@@ -62,17 +72,22 @@ export default function App() {
       });
       setView("noteDetails");
       setSelectedNoteId(response["noteId"]);
-      requestSummary();
     }
     fetchData();
     fetchSummaryObjects();
     requestSummary();
-  }, []);
+  }, [selectedNoteId]);
 
   return (
     <AppContainer>
       <Header>
-        {view === "home" ?  <MainHeader /> : selectedNoteId in summaryState ? <NoteDetailsHeader crafting={false} /> : <NoteDetailsHeader crafting={true} />}
+        {view === "home" ? (
+          <MainHeader />
+        ) : selectedNoteId in summaryState ? (
+          <NoteDetailsHeader crafting={false} />
+        ) : (
+          <NoteDetailsHeader crafting={true} />
+        )}
       </Header>
       <Body>
         {view === "home" &&

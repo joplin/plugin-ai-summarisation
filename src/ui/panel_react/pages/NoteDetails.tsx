@@ -1,10 +1,9 @@
 import * as React from "react";
-import { useState, useEffect, useCallback } from "react";
+import { useCallback } from "react";
 import styled from "styled-components";
 import TiptapEditor from "../components/TipTapEditor";
 import { useAppContext } from "../AppContext";
-
-import { Radio, RadioGroup, Stack, Input } from '@chakra-ui/react'
+import SummaryConfig from "../components/SummaryConfig";
 
 const NoteDetailsContainer = styled.div`
   padding: 10px;
@@ -13,80 +12,19 @@ const NoteDetailsContainer = styled.div`
   gap: 10px;
 `;
 
-const SummarizationFormContainer = styled.div`
-  
-`
-
-const LengthRadioGroup = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  align-items: center;
-`
-
-const AlgorithmRadioGroup = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  align-items: center;
-`
-
 export default function NoteDetails() {
   const { summaryState, dispatchSummary, selectedNoteId } = useAppContext();
-  const [editedContent, setEditedContent] = useState("");
-  const [length, setLength] = useState('short');
-  const [algorithm, setAlgorithm] = useState('');
-
-  const handleContentChange = (content: string) => {
-    setEditedContent(content);
-  };
 
   const displaySummary = useCallback((): string => {
     return summaryState[selectedNoteId].summary;
   }, [selectedNoteId]);
 
-  if(!(selectedNoteId in summaryState)) {
+  if (!(selectedNoteId in summaryState)) {
     return (
       <NoteDetailsContainer>
-        <SummarizationFormContainer>
-          <div style={{flex: "display", flexDirection: "row"}}>
-            <h3 style={{fontSize: "15px", fontWeight: "600"}}>Summary title:</h3>
-            <Input placeholder='Basic usage' />
-          </div>
-          <LengthRadioGroup>
-            <h3 style={{fontSize: "15px", fontWeight: "600"}}>Length:</h3>
-            <RadioGroup onChange={setLength} value={length}>
-                <Stack direction='row'>
-                  <Radio size='sm' value='1'>Short</Radio>
-                  <Radio size='sm' value='2'>Medium</Radio>
-                  <Radio size='sm' value='3'>Long</Radio>
-                </Stack>
-            </RadioGroup>
-          </LengthRadioGroup>
-
-          <AlgorithmRadioGroup>
-            <h3 style={{fontSize: "15px", fontWeight: "600"}}>Algorithms:</h3>
-            <RadioGroup onChange={setAlgorithm} value={algorithm}>
-                <Stack direction='row'>
-                  <Radio size='sm' value='1'>LexRank</Radio>
-                  <Radio size='sm' value='2'>TextRank</Radio>
-                  <Radio size='sm' value='3'>LSA</Radio>
-                  <Radio size='sm' value='4'>KMeans Clustering</Radio>
-                </Stack>
-            </RadioGroup>
-          </AlgorithmRadioGroup>
-          
-          <TiptapEditor
-            key={selectedNoteId}
-            content={"lol"}
-            onContentChange={handleContentChange}
-            crafting={true}
-            selectedNoteId={selectedNoteId}
-            dispatchSummary={dispatchSummary}
-          />
-        </SummarizationFormContainer>
+        <SummaryConfig key={selectedNoteId} />
       </NoteDetailsContainer>
-    )
+    );
   }
 
   return (
@@ -94,7 +32,6 @@ export default function NoteDetails() {
       <TiptapEditor
         key={selectedNoteId}
         content={displaySummary()}
-        onContentChange={handleContentChange}
         crafting={false}
         selectedNoteId={selectedNoteId}
         dispatchSummary={dispatchSummary}

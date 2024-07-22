@@ -7,6 +7,7 @@ import {
   ReactNode,
 } from "react";
 import { summaryReducer } from "./reducers/summaryReducer";
+import { craftedReducer } from "./reducers/craftReducer";
 import { AppState } from "./models/AppState";
 
 const AppContext = createContext<AppState | undefined>(undefined);
@@ -21,8 +22,13 @@ export const useAppContext = () => {
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [view, setView] = useState<"home" | "noteDetails">("home");
-  const [selectedNoteId, setSelectedNoteId] = useState<string| null>(null);
+  const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
+  const [selectedNoteTitle, setSelectedNoteTitle] = useState<string | null>(
+    null,
+  );
+  const [tempSummary, setTempSummary] = useState<string | null>(null);
   const [summaryState, dispatchSummary] = useReducer(summaryReducer, {});
+  const [craft, setCraft] = useReducer(craftedReducer, { tempSummary: "" });
 
   return (
     <AppContext.Provider
@@ -31,8 +37,14 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         setView,
         selectedNoteId,
         setSelectedNoteId,
+        selectedNoteTitle,
+        setSelectedNoteTitle,
         summaryState,
         dispatchSummary,
+        tempSummary,
+        setTempSummary,
+        craft,
+        setCraft,
       }}
     >
       {children}

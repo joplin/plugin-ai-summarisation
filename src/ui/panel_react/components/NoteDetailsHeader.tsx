@@ -20,10 +20,16 @@ const NoteDetailsTitle = styled.h1`
   top: -20px;
   font-size: 28px;
   font-weight: 600;
-`
+`;
+
+const NoteDetailsSubtitle = styled.h1`
+  position: relative;
+  font-size: 16px;
+  font-weight: 400;
+`;
 
 export default function NoteDetailsHeader({ crafting }) {
-  const { setView, setSelectedNoteId } = useAppContext();
+  const { selectedNoteTitle, setView, setSelectedNoteId } = useAppContext();
 
   const handleBackClick = () => {
     setSelectedNoteId(null);
@@ -36,7 +42,10 @@ export default function NoteDetailsHeader({ crafting }) {
         <IoArrowBackCircle size={24} />
         <span>Back to Home</span>
       </BackButton>
-      <NoteDetailsTitle>{crafting ? "Craft your summary!" : "Summary"}</NoteDetailsTitle>
+      <NoteDetailsTitle>
+        {crafting ? "Craft your summary!" : "Summary"}
+      </NoteDetailsTitle>
+      <NoteDetailsSubtitle>Note: {selectedNoteTitle}</NoteDetailsSubtitle>
     </div>
   );
 }

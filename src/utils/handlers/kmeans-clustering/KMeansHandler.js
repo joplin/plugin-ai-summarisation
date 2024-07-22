@@ -12,7 +12,8 @@ export class KMeansClustering extends AIHandler {
         `;
   }
 
-  predict(note, k = 6) {
+  async predict(note, k = 6) {
+    logger.info("KMeans Clustering: Starting the process...");
     const { sentences, processedSentences } = preprocessNote(note);
     const tfidf = getTFIDF(processedSentences);
     const sentenceVectors = this.vectorizeSentences(processedSentences, tfidf);
@@ -74,6 +75,7 @@ export class KMeansClustering extends AIHandler {
   }
 
   initializeCentroids(sentenceVectors, k) {
+    logger.info("KMeans Clustering: Initializing centroids");
     const centroids = [];
     const usedIndexes = new Set();
     while (centroids.length < k) {
@@ -87,6 +89,7 @@ export class KMeansClustering extends AIHandler {
   }
 
   assignClusters(sentenceVectors, centroids) {
+    logger.info("KMeans Clustering: Assigning vectors to centroids");
     return sentenceVectors.map((vector) => {
       let minDistance = Infinity;
       let closestCentroid = -1;
@@ -130,6 +133,7 @@ export class KMeansClustering extends AIHandler {
   }
 
   kmeans(sentenceVectors, k, maxIterations = 1000) {
+    logger.info("KMeans Clustering: Start clustering");
     let centroids = this.initializeCentroids(sentenceVectors, k);
     let assignments = this.assignClusters(sentenceVectors, centroids);
 
@@ -148,6 +152,7 @@ export class KMeansClustering extends AIHandler {
   }
 
   extractSummary(tokenizedSentences, sentenceVectors, assignments, centroids) {
+    logger.info("KMeans Clustering: Creating a summary");
     const summary = [];
     const clusters = Array.from({ length: centroids.length }, () => []);
 

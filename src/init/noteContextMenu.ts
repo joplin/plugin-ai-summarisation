@@ -58,7 +58,22 @@ async function createSummary(
       body: String(newBody),
     });
   }
-  await panel.sendSummaryData({ summary: summary, noteId: note["id"], noteTitle: note["title"] });
+
+  const newSummary = `
+  <blockquote>
+        <p><span style="color: #ffaa00">
+            Click on the summary text to edit. You can delete this blockquote.
+        </span></p>
+  </blockquote>  
+
+  ${summary}
+
+  `;
+  await panel.sendSummaryData({
+    summary: newSummary,
+    noteId: note["id"],
+    noteTitle: note["title"],
+  });
 }
 
 async function initNoteContextMenu(

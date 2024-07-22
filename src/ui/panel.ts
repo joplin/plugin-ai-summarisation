@@ -1,7 +1,11 @@
 import joplin from "api";
 import type { Message } from "./msgTypes";
-import { resolve } from "path";
 import { ModelType } from "api/types";
+
+import { LexRankHandler } from "../utils/handlers/lex-rank/LexRankHandler";
+import { LSAHandler } from "../utils/handlers/lsa/LSAHandler";
+import { KMeansClustering } from "../utils/handlers/kmeans-clustering/KMeansHandler";
+const SummaryBot = require("summarybot");
 
 const fs = require("fs-extra");
 const logger = require("electron-log");
@@ -93,7 +97,7 @@ export class SummarisationPanel {
         }
       });
 
-      for(const note of notes) {
+      for (const note of notes) {
         if (note["parent_id"] === currNotebookLevel["id"]) {
           currNotebookLevel["notes"].push(note);
         }
@@ -110,7 +114,16 @@ export class SummarisationPanel {
   public async sendSummaryData(summaryObj) {
     if (this.sendSummary) {
       this.sendSummary(summaryObj);
-      await joplin.data.userDataSet(ModelType.Note, summaryObj["noteId"], "summaryObj", { summary: summaryObj["summary"], noteId: summaryObj["noteId"] });
+      await joplin.data.userDataSet(
+        ModelType.Note,
+        summaryObj["noteId"],
+        "summaryObj",
+        {
+          summary: summaryObj["summary"],
+          noteId: summaryObj["noteId"],
+          noteTitle: summaryObj["noteTitle"],
+        },
+      );
       this.sendSummary = null;
     } else {
       logger.error(
@@ -123,72 +136,159 @@ export class SummarisationPanel {
     const summaryObjects = [];
     const notes = await this.fetchAllNotes();
 
-    for(const note of notes) {
-      const summaryObj = await joplin.data.userDataGet(ModelType.Note, note["id"], "summaryObj");
-      if(summaryObj !== undefined && summaryObj !== null) {
+    for (const note of notes) {
+      const summaryObj = await joplin.data.userDataGet(
+        ModelType.Note,
+        note["id"],
+        "summaryObj",
+      );
+      if (summaryObj !== undefined && summaryObj !== null) {
         summaryObjects.push(summaryObj);
       }
     }
-    this.sendSummaryObjects({ summaryObjects: summaryObjects })
+    this.sendSummaryObjects({ summaryObjects: summaryObjects });
+  }
+
+  private async runPredictionSummary(
+    length: string,
+    algorithm: string,
+    noteId: string,
+  ) {
+    const note = await joplin.data.get(["notes", noteId], {
+      fields: ["id", "title", "body"],
+    });
+    const noteBody = note["body"];
+
+    let kmeansLength = parseInt(length);
+    if (algorithm === "kmeans") {
+      if (noteBody.length <= 200) {
+        kmeansLength = 3;
+      }
+    }
+
+    try {
+      switch (algorithm) {
+        case "lexRank": {
+          const handler = new LexRankHandler();
+          const prediction = handler.predict(noteBody, parseInt(length));
+          return prediction;
+        }
+        case "textRank": {
+          const summaryBot = new SummaryBot();
+          const summary = summaryBot.run(noteBody, parseInt(length), false);
+          return summary;
+        }
+        case "lsa": {
+          const handler = new LSAHandler();
+          const prediction = handler.predict(noteBody, parseInt(length));
+          return prediction;
+        }
+        case "kmeans": {
+          logger.info(
+            "KMeans Clustering: Request from the panel to run prediction...",
+          );
+          const handler = new KMeansClustering();
+          const prediction = await handler.predict(noteBody, kmeansLength);
+          return prediction;
+        }
+        default: {
+          logger.error("Unknown algorithm in runPredictionSummary");
+          throw new Error("Unknown algorithm");
+        }
+      }
+    } catch (error) {
+      logger.error(`Error in runPredictionSummary: ${error.message}`);
+      await joplin.views.dialogs.showMessageBox(
+        `Error in runPredictionSummary: ${error.message}`,
+      );
+      throw error;
+    }
   }
 
   private async handleMessage(msg: Message) {
-    switch (msg.type) {
-      case "initPanel": {
-        const { notebooks, rootNotebooks } = await this.fetchAllNotebooks();
-        const notes = await this.fetchAllNotes();
+    try {
+      switch (msg.type) {
+        case "initPanel": {
+          const { notebooks, rootNotebooks } = await this.fetchAllNotebooks();
+          const notes = await this.fetchAllNotes();
 
-        const notebookTree = [];
-        try {
-          for (const currNotebook of rootNotebooks) {
-            const currId = currNotebook["id"];
+          const notebookTree = [];
+          try {
+            for (const currNotebook of rootNotebooks) {
+              const currId = currNotebook["id"];
 
-            notebookTree.push({
-              id: currId,
-              title: currNotebook["title"],
-              parentId: currNotebook["parent_id"],
-              notebooks: [],
-              notes: [],
-            });
+              notebookTree.push({
+                id: currId,
+                title: currNotebook["title"],
+                parentId: currNotebook["parent_id"],
+                notebooks: [],
+                notes: [],
+              });
+            }
+            await this.constructNotebookTree(notebooks, notes, notebookTree);
+          } catch (err) {
+            logger.error(`Error when constructing notebook tree: ${err}`);
           }
-          await this.constructNotebookTree(notebooks, notes, notebookTree);
-        } catch (err) {
-          logger.error(`Error when constructing notebook tree: ${err}`);
+
+          return { notebookTree };
         }
-
-        return { notebookTree };
+        case "requestSummaryObjects": {
+          return new Promise((resolve) => {
+            this.sendSummaryObjects = resolve;
+          });
+        }
+        case "updateSummaryHTML": {
+          await joplin.data.userDataSet(
+            ModelType.Note,
+            msg.nodeId,
+            "summaryObj",
+            { summary: msg.summaryHTML, noteId: msg.nodeId },
+          );
+          break;
+        }
+        case "getNotes": {
+          const notes = await this.fetchAllNotes();
+          return { notes };
+        }
+        case "predictSummary": {
+          const result = await this.runPredictionSummary(
+            msg.length,
+            msg.algorithm,
+            msg.noteId,
+          );
+          return { prediction: result };
+        }
+        case "requestSummary": {
+          return new Promise((resolve) => {
+            this.sendSummary = resolve;
+          });
+        }
+        case "requestSelectedNoteId": {
+          return new Promise((resolve) => {
+            this.sendSelectedNoteId = resolve;
+          });
+        }
+        case "openNoteInJoplin": {
+          await joplin.commands.execute("openNote", msg.noteId);
+          break;
+        }
+        case "storeSummary": {
+          await joplin.data.userDataSet(
+            ModelType.Note,
+            msg.noteId,
+            "summaryObj",
+            { summary: msg.summary, noteId: msg.noteId },
+          );
+          break;
+        }
+        default: {
+          logger.error("Unknown request from webview");
+        }
       }
-      case "requestSummaryObjects": {
-        return new Promise((resolve) => {
-          this.sendSummaryObjects = resolve;
-        });
-      }
-      case "updateSummaryHTML": {
-        await joplin.data.userDataSet(ModelType.Note, msg.nodeId, "summaryObj", { summary: msg.summaryHTML, noteId: msg.nodeId });
-      }
-      case "getNotes": {
-        const notes = await this.fetchAllNotes();
-        return { notes };
-      }
-      case "getSummary": {
-
-      }
-      case "predictSummary": {
-
-      }
-      case "requestSummary": {
-        return new Promise((resolve) => {
-          this.sendSummary = resolve;
-        });
-      }
-      case "requestSelectedNoteId": {
-        return new Promise((resolve) => {
-          this.sendSelectedNoteId = resolve;
-        });
-      }
-      default: {
-        logger.error("Unknown request from webview");
-      }
+    } catch (error) {
+      logger.error(
+        `Error handling message of type ${msg.type}: ${error.message}`,
+      );
     }
   }
 }

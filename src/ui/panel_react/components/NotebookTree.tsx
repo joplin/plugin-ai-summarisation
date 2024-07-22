@@ -52,15 +52,24 @@ interface NotebookProps {
 
 export default function NotebookTree({ notebook, level = 0 }: NotebookProps) {
   const [expanded, setExpanded] = useState(true);
-  const { summaryState, setView, setSelectedNoteId } = useAppContext();
+  const {
+    summaryState,
+    setView,
+    selectedNoteId,
+    setSelectedNoteId,
+    selectedNoteTitle,
+    setSelectedNoteTitle,
+  } = useAppContext();
 
   const toggleExpand = () => {
     setExpanded(!expanded);
   };
 
-  const handleNoteClick = (id: string) => {
+  const handleNoteClick = async (id: string, noteTitle: string) => {
+    setSelectedNoteTitle(noteTitle);
     setSelectedNoteId(id);
     setView("noteDetails");
+    await webviewApi.postMessage({ type: "openNoteInJoplin", noteId: id });
   };
 
   return (
@@ -75,7 +84,7 @@ export default function NotebookTree({ notebook, level = 0 }: NotebookProps) {
           {notebook.notes.map((note) => (
             <NoteElement
               key={note.id}
-              onClick={() => handleNoteClick(note.id)}
+              onClick={() => handleNoteClick(note.id, note.title)}
               isSummarized={note.id in summaryState}
             >
               <CgNotes />

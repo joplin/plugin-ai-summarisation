@@ -2,6 +2,11 @@ export interface InitPanel {
   type: "initPanel";
 }
 
+export interface OpenNoteInJoplin {
+  type: "openNoteInJoplin";
+  noteId: string;
+}
+
 export interface GetNotes {
   type: "getNotes";
 }
@@ -14,11 +19,19 @@ export interface UpdateSummaryHTML {
   type: "updateSummaryHTML";
   summaryHTML: string;
   nodeId: string;
-
 }
 
 export interface PredictSummary {
   type: "predictSummary";
+  length: string;
+  algorithm: string;
+  noteId: string;
+}
+
+export interface StoreSummary {
+  type: "storeSummary";
+  noteId: string;
+  summary: string;
 }
 
 export interface RequestSummaryObjects {
@@ -35,10 +48,12 @@ export interface RequestSelectedNoteId {
 
 export type Message =
   | InitPanel
+  | OpenNoteInJoplin
   | GetNotes
   | GetSummary
   | UpdateSummaryHTML
   | RequestSummaryObjects
   | PredictSummary
+  | StoreSummary
   | RequestSummary
   | RequestSelectedNoteId;
