@@ -1,6 +1,6 @@
 import joplin from "api";
 import type { Message } from "./msgTypes";
-import { ModelType } from "api/types";
+import { MenuItemLocation, ModelType } from "api/types";
 
 import { LexRankHandler } from "../utils/handlers/lex-rank/LexRankHandler";
 import { LSAHandler } from "../utils/handlers/lsa/LSAHandler";
@@ -63,6 +63,26 @@ export class SummarisationPanel {
     );
     await joplin.views.panels.show(this.panelInstance);
     joplin.views.panels.onMessage(this.panelInstance, this.handleMessage);
+
+    joplin.commands.register({
+      name: 'ai.toggle_panel',
+      label: 'Toggle Joplin AI Summarization panel',
+      execute: async () => {
+        if (await joplin.views.panels.visible(this.panelInstance)) {
+          await joplin.views.panels.hide(this.panelInstance);
+        } else {
+          await joplin.views.panels.show(this.panelInstance);
+          this.sendSummaryObjectsData();
+        }
+      },
+    })
+
+    joplin.views.menuItems.create(
+      'ai.toggle_panel.menu_item',
+      'ai.toggle_panel',
+      MenuItemLocation.View,
+      { accelerator: 'CmdOrCtrl+Shift+F' },
+    )
   }
 
   async fetchAllNotebooks() {
@@ -165,6 +185,9 @@ export class SummarisationPanel {
     if (algorithm === "kmeans") {
       if (noteBody.length <= 200) {
         kmeansLength = 3;
+      }
+      if (noteBody.length >= 500) {
+        kmeansLength = 16;
       }
     }
 

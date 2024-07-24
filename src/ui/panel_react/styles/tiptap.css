@@ -9,24 +9,31 @@
 }
 
 .bubble-menu {
-  background-color: red;
-  border: 1px solid green;
+  background-color: rgb(74, 122, 205);
+  border: 1px solid black;
   border-radius: 0.7rem;
   display: flex;
+  gap: 6px;
   padding: 0.2rem;
 
   button {
     background-color: unset;
 
     &:hover {
-      background-color: yellow;
+      background-color: #C5EFFF;
+      border-radius: 0.7rem;
+      font-weight: 600;
     }
 
     &.is-active {
-      background-color: blue;
+      background-color: #ffaa00;
+      border-radius: 0.7rem;
+      font-weight: 800;
 
       &:hover {
-        background-color: orange;
+        background-color: rgb(255, 128, 0);
+        font-weight: 600;
+        border-radius: 0.7rem;
       }
     }
   }

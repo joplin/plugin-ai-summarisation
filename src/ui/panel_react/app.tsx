@@ -17,7 +17,7 @@ const AppContainer = styled.div`
 const Header = styled.div`
   border-radius: 20px;
   background-color: #f5f5f5;
-  padding: 10px;
+  padding: 5px;
   text-align: center;
 `;
 
