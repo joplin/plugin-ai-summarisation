@@ -1,8 +1,14 @@
 # 🤖 Joplin AI - Summarisation
 
-By Ton Hoang Nguyen (Bill): https://github.com/HahaBill
+<br>
 
-Google Summer of Code 2024: https://summerofcode.withgoogle.com/programs/2024/projects/Ble8LKDb
+#### a. By Ton Hoang Nguyen (Bill) 🧑‍💻: https://github.com/HahaBill
+
+#### b. Google Summer of Code 2024: https://summerofcode.withgoogle.com/programs/2024/projects/Ble8LKDb
+
+#### c. Project Website: https://discourse.joplinapp.org/c/gsoc-projects/summarize-ai/35
+
+<br>
 
 ## 1. Introduction
 
@@ -38,4 +44,5 @@ Abstractive summarization tends to be more computationally expensive since you m
 # References
 
 [1] IBM - Text Summarization https://www.ibm.com/topics/text-summarization
+
 [2] Automatic Text Summarization Methods: https://arxiv.org/abs/2204.01849
