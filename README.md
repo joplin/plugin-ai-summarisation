@@ -31,9 +31,22 @@ Abstractive summarization tends to be more computationally expensive since you m
 
 [Work in progress...]
 
-# About the creator of the plugin
 
-<br>
+## 2. Usage
+
+Starting the Joplin will at first make the Joplin AI Summarization panel appear. Users can hide/show panel by using keyboard shortcuts: `command + shift + f` (MacOS)
+and `ctrl + shift + f` (Windows).
+
+In the panel, clicking on the notes will also open notes in Joplin. There, you can craft your own summary!
+
+In Joplin, you can summarise notes by using:
+
+1. Note Context Menu
+2. Notebook Context Menu
+3. Editor Context Menu
+
+
+# About the creator of the plugin
 
 #### a. By Ton Hoang Nguyen (Bill) 🧑‍💻: https://github.com/HahaBill
 
@@ -41,7 +54,6 @@ Abstractive summarization tends to be more computationally expensive since you m
 
 #### c. Project Website: https://discourse.joplinapp.org/c/gsoc-projects/summarize-ai/35
 
-<br>
 
 # References
 
