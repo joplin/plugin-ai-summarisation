@@ -20,3 +20,17 @@
   align-items: center;
   margin: 0 0 5px 20px;
 }
+
+.main-header {
+  color: white;
+  background-color: rgb(74, 122, 205);
+  border-radius: 20px;
+  margin: 20px;
+}
+
+.note-header {
+  color: white;
+  background-color: rgb(74, 122, 205);
+  border-radius: 20px;
+  margin: 20px;
+}

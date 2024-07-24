@@ -34,6 +34,10 @@ export interface StoreSummary {
   summary: string;
 }
 
+export interface RequestNoteContent {
+  type: "requestNoteContent";
+}
+
 export interface RequestSummaryObjects {
   type: "requestSummaryObjects";
 }
@@ -56,4 +60,5 @@ export type Message =
   | PredictSummary
   | StoreSummary
   | RequestSummary
-  | RequestSelectedNoteId;
+  | RequestSelectedNoteId
+  | RequestNoteContent;

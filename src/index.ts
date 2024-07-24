@@ -29,8 +29,8 @@ joplin.plugins.register({
 
     // Content Menus
     initNoteContextMenu(noteDialog, panel);
-    initEditorContextMenu(editorDialog);
-    initNotebookContextMenu(notebookDialog);
+    initEditorContextMenu(editorDialog, panel);
+    initNotebookContextMenu(notebookDialog, panel);
 
     logger.info(
       "Joplin AI Summarization plugin has been successfully initialized.",

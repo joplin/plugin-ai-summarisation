@@ -2,12 +2,18 @@ import joplin from "api";
 import { MenuItemLocation } from "api/types";
 import { NotebookDialog } from "../ui/dialogs";
 import { NotebookInfo } from "src/models/notebook";
+import { SummarisationPanel } from "src/ui/panel";
 
 const SummaryBot = require("summarybot");
 const logger = require("electron-log");
 const userTriggered = true;
 
-async function summarizeNotesRecursively(parentId, allNotes, allNotebooks) {
+async function summarizeNotesRecursively(
+  parentId,
+  allNotes,
+  allNotebooks,
+  panel: SummarisationPanel,
+) {
   if (parentId === null || parentId === undefined) {
     return;
   }
@@ -50,11 +56,20 @@ async function summarizeNotesRecursively(parentId, allNotes, allNotebooks) {
   }
 
   for (const traverseNotebook of notebooksToContinue) {
-    summarizeNotesRecursively(traverseNotebook["id"], allNotes, allNotebooks);
+    summarizeNotesRecursively(
+      traverseNotebook["id"],
+      allNotes,
+      allNotebooks,
+      panel,
+    );
   }
 }
 
-async function summarizeImmediateChildren(parentId, allNotes) {
+async function summarizeImmediateChildren(
+  parentId,
+  allNotes,
+  panel: SummarisationPanel,
+) {
   if (parentId === null || parentId === undefined) {
     return;
   }
@@ -90,7 +105,10 @@ async function summarizeImmediateChildren(parentId, allNotes) {
   }
 }
 
-async function initNotebookContextMenu(notebookDialog: NotebookDialog) {
+async function initNotebookContextMenu(
+  notebookDialog: NotebookDialog,
+  panel: SummarisationPanel,
+) {
   await joplin.commands.register({
     name: "ai.notebookCommandContextMenu.textrank",
     label: "Summarize the notebook",
@@ -108,12 +126,13 @@ async function initNotebookContextMenu(notebookDialog: NotebookDialog) {
         result["formData"]["note-ai-summarization"]["summary-notebook-option"];
 
       if (summarizeOption === "immediateChildrenNotes") {
-        summarizeImmediateChildren(folderId, allNotes["items"]);
+        summarizeImmediateChildren(folderId, allNotes["items"], panel);
       } else if (summarizeOption === "allNotes") {
         summarizeNotesRecursively(
           folderId,
           allNotes["items"],
           allNotebooks["items"],
+          panel,
         );
       } else {
         logger.info("Work in progress");

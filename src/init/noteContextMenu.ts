@@ -3,6 +3,7 @@ import { MenuItemLocation } from "api/types";
 import { NoteDialog } from "src/ui/dialogs";
 import { NoteInfo } from "src/models/note";
 import { SummarisationPanel } from "src/ui/panel";
+import { LexRankHandler } from "../utils/handlers/lex-rank/LexRankHandler";
 
 const logger = require("electron-log");
 const userTriggered = true;
@@ -16,12 +17,16 @@ async function summarizeNoteContextMenu(
   const noteInfo: NoteInfo = { name: note["title"], noteBody: note["body"] };
   const result: any = await noteDialog.openDialog(noteInfo);
 
+  const handler = new LexRankHandler();
+  const summary = handler.predict(note["body"], 10);
+
   setTimeout(
     () =>
       createSummary(
         note,
         multiple,
-        result["formData"]["note-ai-summarization"]["summarized-note-content"],
+        summary,
+        result["formData"]["note-ai-summarization"]["inline-summary"],
         panel,
       ),
     1000,
@@ -32,31 +37,34 @@ async function createSummary(
   note,
   multiple,
   summary,
+  inlineSummary,
   panel: SummarisationPanel,
 ) {
-  const newBody = `## Summarization\n---\n${summary}\n\n---\n\n${note["body"]}`;
-  if (!multiple) {
-    const selectedNote = await joplin.workspace.selectedNote();
-    const codeView = await joplin.settings.globalValue("editor.codeView");
+  if (inlineSummary === "inline-summary") {
+    const newBody = `## Summarization\n---\n${summary}\n\n---\n\n${note["body"]}`;
+    if (!multiple) {
+      const selectedNote = await joplin.workspace.selectedNote();
+      const codeView = await joplin.settings.globalValue("editor.codeView");
 
-    if (
-      selectedNote.id === note["id"] &&
-      userTriggered === true &&
-      codeView === true
-    ) {
-      await joplin.commands.execute("textSelectAll");
-      await joplin.commands.execute("replaceSelection", String(newBody));
-    } else if (selectedNote.id !== note["id"]) {
+      if (
+        selectedNote.id === note["id"] &&
+        userTriggered === true &&
+        codeView === true
+      ) {
+        await joplin.commands.execute("textSelectAll");
+        await joplin.commands.execute("replaceSelection", String(newBody));
+      } else if (selectedNote.id !== note["id"]) {
+        await joplin.data.put(["notes", note["id"]], null, {
+          body: String(newBody),
+        });
+      } else {
+        console.log("No summarization");
+      }
+    } else {
       await joplin.data.put(["notes", note["id"]], null, {
         body: String(newBody),
       });
-    } else {
-      console.log("No summarization");
     }
-  } else {
-    await joplin.data.put(["notes", note["id"]], null, {
-      body: String(newBody),
-    });
   }
 
   const newSummary = `

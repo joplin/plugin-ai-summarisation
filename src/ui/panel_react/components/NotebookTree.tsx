@@ -33,7 +33,7 @@ const NoteElement = styled.div<{ isSummarized: boolean }>`
   margin: 6px 0 6px 20px;
   cursor: pointer;
   background-color: ${({ isSummarized }) =>
-    isSummarized ? "#d4edda" : "transparent"};
+    isSummarized ? "#FFD564" : "transparent"};
   &:hover {
     background-color: #f0f0f0;
   }

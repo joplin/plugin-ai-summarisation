@@ -37,7 +37,7 @@ export default function NoteDetailsHeader({ crafting }) {
   };
 
   return (
-    <div>
+    <div className="note-header">
       <BackButton onClick={handleBackClick}>
         <IoArrowBackCircle size={24} />
         <span>Back to Home</span>

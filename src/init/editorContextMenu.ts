@@ -2,10 +2,15 @@ import joplin from "api";
 import { MenuItemLocation } from "api/types";
 import { EditorDialog } from "src/ui/dialogs";
 import { NoteInfo } from "src/models/note";
+import { LexRankHandler } from "../utils/handlers/lex-rank/LexRankHandler";
+import { SummarisationPanel } from "src/ui/panel";
 
 const logger = require("electron-log");
 
-async function initEditorContextMenu(editorDialog: EditorDialog) {
+async function initEditorContextMenu(
+  editorDialog: EditorDialog,
+  panel: SummarisationPanel,
+) {
   await joplin.commands.register({
     name: "ai.editorCommandContextMenu.textrank",
     label: "Summarize the highlighted text",
@@ -15,28 +20,39 @@ async function initEditorContextMenu(editorDialog: EditorDialog) {
       )) as string;
       const selectedNote = await joplin.workspace.selectedNote();
 
-      logger.info(
-        `Editor Context Menu SELECTED TEXT: ${JSON.stringify(selectedText)}`,
-      );
-      logger.info(
-        `Editor Context Menu BODY: ${JSON.stringify(selectedNote["body"])}`,
-      );
-
-      logger.info(`Editor Context Menu: ${JSON.stringify(editorDialog)}`);
       const noteInfo: NoteInfo = {
         name: selectedNote["title"],
         noteBody: selectedText,
       };
+
       const result: any = await editorDialog.openDialog(noteInfo);
-      logger.info(`Editor Context Menu RESULT:: ${JSON.stringify(result)}`);
 
-      const summary: string =
-        result["formData"]["note-ai-summarization"]["summarized-note-content"];
+      const inlineSummary: string =
+        result["formData"]["note-ai-summarization"]["inline-summary"];
 
+      const handler = new LexRankHandler();
+      const summary = handler.predict(selectedText, 10);
       const newBody = `## Summarization\n---\n${summary}\n\n---\n\n${selectedNote.body}`;
 
-      await joplin.commands.execute("textSelectAll");
-      await joplin.commands.execute("replaceSelection", String(newBody));
+      if (inlineSummary === "inline-summary") {
+        await joplin.commands.execute("textSelectAll");
+        await joplin.commands.execute("replaceSelection", String(newBody));
+      }
+      const newSummary = `
+        <blockquote>
+              <p><span style="color: #ffaa00">
+                  Click on the summary text to edit. You can delete this blockquote.
+              </span></p>
+        </blockquote>  
+
+        ${summary}
+
+      `;
+      await panel.sendSummaryData({
+        summary: newSummary,
+        noteId: selectedNote["id"],
+        noteTitle: selectedNote["title"],
+      });
     },
   });
   await joplin.views.menuItems.create(

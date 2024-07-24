@@ -1,15 +1,24 @@
 import * as React from "react";
 import styled from "styled-components";
+import { FaRobot } from "react-icons/fa";
 
-const MainTitle = styled.h1`
+const MainTitle = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
   font-size: 28px;
   font-weight: 600;
 `;
 
 export default function MainHeader() {
   return (
-    <div>
-      <MainTitle>Joplin AI - Summarization</MainTitle>
+    <div className="main-header">
+      <MainTitle>
+        <FaRobot />
+        Joplin AI - Summarization
+      </MainTitle>
     </div>
   );
 }

@@ -15,11 +15,13 @@ export class SummarisationPanel {
   private sendSummary;
   private sendSummaryObjects;
   private sendSelectedNoteId;
+  private sendNoteContent;
 
   constructor() {
     this.handleMessage = this.handleMessage.bind(this);
     this.sendSummary = null;
     this.sendSummaryObjects = null;
+    this.sendNoteContent = null;
     this.sendSelectedNoteId = null;
   }
 
@@ -280,6 +282,11 @@ export class SummarisationPanel {
             { summary: msg.summary, noteId: msg.noteId },
           );
           break;
+        }
+        case "requestNoteContent": {
+          return new Promise((resolve) => {
+            this.sendNoteContent = resolve;
+          });
         }
         default: {
           logger.error("Unknown request from webview");

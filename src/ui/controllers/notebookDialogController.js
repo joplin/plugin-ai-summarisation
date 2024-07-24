@@ -1,5 +1,3 @@
-let currLength = "6";
-let currModel = "lexRank";
 let currNotesSelection = "immediateChildrenNotes";
 
 document
