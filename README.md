@@ -1,15 +1,5 @@
 # 🤖 Joplin AI - Summarisation
 
-<br>
-
-#### a. By Ton Hoang Nguyen (Bill) 🧑‍💻: https://github.com/HahaBill
-
-#### b. Google Summer of Code 2024: https://summerofcode.withgoogle.com/programs/2024/projects/Ble8LKDb
-
-#### c. Project Website: https://discourse.joplinapp.org/c/gsoc-projects/summarize-ai/35
-
-<br>
-
 ## 1. Introduction
 
 ### 1.1 Motivation
@@ -40,6 +30,18 @@ information, and then re-create its core in a brief text.
 Abstractive summarization tends to be more computationally expensive since you must utilize neural networks and generative systems. On the other hand, extractive summarization does not require the use of deep learning and data labeling [1].
 
 [Work in progress...]
+
+# About the creator of the plugin
+
+<br>
+
+#### a. By Ton Hoang Nguyen (Bill) 🧑‍💻: https://github.com/HahaBill
+
+#### b. Google Summer of Code 2024: https://summerofcode.withgoogle.com/programs/2024/projects/Ble8LKDb
+
+#### c. Project Website: https://discourse.joplinapp.org/c/gsoc-projects/summarize-ai/35
+
+<br>
 
 # References
 
