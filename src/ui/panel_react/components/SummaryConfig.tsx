@@ -126,7 +126,7 @@ export default function SummaryConfig() {
         <Input
           variant="flushed"
           size="sm"
-          placeholder="Write a title for your summary..."
+          placeholder="WORK IN PROGRESS: Write a title for your summary..."
         />
       </SummaryTitleInput>
       <LengthRadioGroup>
