@@ -39,6 +39,10 @@ and `ctrl + shift + f` (Windows).
 
 In the panel, clicking on the notes will also open notes in Joplin. There, you can craft your own summary!
 
+
+https://github.com/user-attachments/assets/c5e81bf7-42d3-47a4-b11d-7972e6edb762
+
+
 In Joplin, you can summarise notes by using:
 
 1. Note Context Menu
