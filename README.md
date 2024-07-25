@@ -29,13 +29,27 @@ information, and then re-create its core in a brief text.
 
 Abstractive summarization tends to be more computationally expensive since you must utilize neural networks and generative systems. On the other hand, extractive summarization does not require the use of deep learning and data labeling [1].
 
-[Work in progress...]
-
-
 ## 2. Usage
 
 Starting the Joplin will at first make the Joplin AI Summarization panel appear. Users can hide/show panel by using keyboard shortcuts: `command + shift + f` (MacOS)
 and `ctrl + shift + f` (Windows).
+
+```mermaid
+
+
+flowchart LR
+   A[Opening Joplin]-.-> B[Using the Panel]
+   A[Opening Joplin]-.-> C[Using Context Menus]
+   C -.-> D[Click on the Notebook and right-click]
+   C -.-> E[Click on the Note]
+   E -.-> F[Right-click on the note]
+   E -.-> G[Highlight multiple text in the note]
+   F -.-> H[Summarize the note]
+   G -.-> I[Summarize the highlighted text]
+
+
+
+```
 
 In the panel, clicking on the notes will also open notes in Joplin. There, you can craft your own summary!
 
