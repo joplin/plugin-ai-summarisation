@@ -45,7 +45,12 @@ flowchart LR
    E -.-> F[Right-click on the note]
    E -.-> G[Highlight multiple text in the note]
    F -.-> H[Summarize the note]
-   G -.-> I[Summarize the highlighted text]
+   G -.-> I[Right-click on the text]
+   I -.-> J[Summarize the highlighted text]
+   B -.-> K[Click on the note in the notebook tree]
+   K -. opening the note in Joplin and Summary Crafting Page .-> L[Edit the summary, configure length and choose different algorithms]
+   L -.-> M[Click save]
+   M -. Redirects to Note Summary Page .-> N[edit, change font-weight, etc.]
 
 
 
