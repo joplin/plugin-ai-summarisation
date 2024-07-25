@@ -31,8 +31,12 @@ Abstractive summarization tends to be more computationally expensive since you m
 
 ## 2. Usage
 
+### 2.1 Hide/Show Panel
+
 Starting the Joplin will at first make the Joplin AI Summarization panel appear. Users can hide/show panel by using keyboard shortcuts: `command + shift + f` (MacOS)
 and `ctrl + shift + f` (Windows).
+
+### 2.2 Flowchart
 
 ```mermaid
 flowchart LR
@@ -52,9 +56,10 @@ flowchart LR
    D -.-> O[Right-click on the notebook]
    O -.-> P[Summarize the notebook]
 ```
+#### Panel
+Clicking on the notes in the panel will also open notes in Joplin. There, you can craft your own summary by adjusting its length and generating multiple versions of summaries by performing various algorithms (LexRank, TextRank, LSA, KMeans Clustering) to find the best summary.
 
-In the panel, clicking on the notes will also open notes in Joplin. There, you can craft your own summary! 
-
+#### Joplin App
 In Joplin, you can summarise notes by using:
 
 1. Note Context Menu
@@ -62,7 +67,7 @@ In Joplin, you can summarise notes by using:
 3. Editor Context Menu
 
 
-### 2.1 📹 Video Demonstration
+### 2.3 📹 Video Demonstration
 
 https://github.com/user-attachments/assets/c5e81bf7-42d3-47a4-b11d-7972e6edb762
 
