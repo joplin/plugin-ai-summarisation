@@ -73,7 +73,7 @@ https://github.com/user-attachments/assets/c5e81bf7-42d3-47a4-b11d-7972e6edb762
 
 
 
-# About the creator of the plugin
+# About the plugin
 
 #### a. By Ton Hoang Nguyen (Bill) 🧑‍💻: https://github.com/HahaBill
 
