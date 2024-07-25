@@ -35,12 +35,10 @@ Starting the Joplin will at first make the Joplin AI Summarization panel appear.
 and `ctrl + shift + f` (Windows).
 
 ```mermaid
-
-
 flowchart LR
    A[Opening Joplin]-.-> B[Using the Panel]
    A[Opening Joplin]-.-> C[Using Context Menus]
-   C -.-> D[Click on the Notebook and right-click]
+   C -.-> D[Click on the Notebook]
    C -.-> E[Click on the Note]
    E -.-> F[Right-click on the note]
    E -.-> G[Highlight multiple text in the note]
@@ -48,25 +46,26 @@ flowchart LR
    G -.-> I[Right-click on the text]
    I -.-> J[Summarize the highlighted text]
    B -.-> K[Click on the note in the notebook tree]
-   K -. opening the note in Joplin and Summary Crafting Page .-> L[Edit the summary, configure length and choose different algorithms]
+   K -.-> L[Edit the summary, configure length and choose different algorithms]
    L -.-> M[Click save]
-   M -. Redirects to Note Summary Page .-> N[edit, change font-weight, etc.]
-
-
-
+   M -.-> N[edit, change font-weight, etc.]
+   D -.-> O[Right-click on the notebook]
+   O -.-> P[Summarize the notebook]
 ```
 
-In the panel, clicking on the notes will also open notes in Joplin. There, you can craft your own summary!
-
-
-https://github.com/user-attachments/assets/c5e81bf7-42d3-47a4-b11d-7972e6edb762
-
+In the panel, clicking on the notes will also open notes in Joplin. There, you can craft your own summary! 
 
 In Joplin, you can summarise notes by using:
 
 1. Note Context Menu
 2. Notebook Context Menu
 3. Editor Context Menu
+
+
+### 2.1 📹 Video Demonstration
+
+https://github.com/user-attachments/assets/c5e81bf7-42d3-47a4-b11d-7972e6edb762
+
 
 
 # About the creator of the plugin
