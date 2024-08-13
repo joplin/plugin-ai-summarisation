@@ -17,7 +17,7 @@ const NotebookContainer = styled.div<NotebookContainerProps>`
 
 const NotebookTitle = styled.div`
   margin: 0;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: bold;
 `;
 
@@ -55,9 +55,7 @@ export default function NotebookTree({ notebook, level = 0 }: NotebookProps) {
   const {
     summaryState,
     setView,
-    selectedNoteId,
     setSelectedNoteId,
-    selectedNoteTitle,
     setSelectedNoteTitle,
   } = useAppContext();
 

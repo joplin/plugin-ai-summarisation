@@ -2,10 +2,10 @@ import * as React from "react";
 import { useEffect } from "react";
 import styled from "styled-components";
 import { useAppContext } from "./AppContext";
-import NotebookTree from "./components/NotebookTree";
 import NoteDetails from "./pages/NoteDetails";
 import MainHeader from "./components/MainHeader";
 import NoteDetailsHeader from "./components/NoteDetailsHeader";
+import Home from "./pages/Home";
 
 const AppContainer = styled.div`
   display: flex;
@@ -36,6 +36,7 @@ export default function App() {
     summaryState,
     setView,
     setSelectedNoteId,
+    setSelectedNoteTitle,
     dispatchSummary,
   } = useAppContext();
   const [notebookTree, setNotebookTree] = React.useState([]);
@@ -73,9 +74,16 @@ export default function App() {
       setView("noteDetails");
       setSelectedNoteId(response["noteId"]);
     }
+    async function noteOnChange() {
+      const response = await webviewApi.postMessage({ type: "openNoteInPanel" });
+      setView("noteDetails");
+      setSelectedNoteId(response["selectedNote"]["id"]);
+      setSelectedNoteTitle(response["selectedNote"]["title"]);
+    }
     fetchData();
     fetchSummaryObjects();
     requestSummary();
+    noteOnChange();
   }, [selectedNoteId]);
 
   return (
@@ -91,10 +99,8 @@ export default function App() {
       </Header>
       <Body>
         {view === "home" &&
-          Array.isArray(notebookTree) &&
-          notebookTree.map((notebook) => (
-            <NotebookTree key={notebook.id} notebook={notebook} />
-          ))}
+          <Home notebookTree={notebookTree} />
+        }
         {view === "noteDetails" && selectedNoteId !== null && (
           <NoteDetails key={selectedNoteId} />
         )}

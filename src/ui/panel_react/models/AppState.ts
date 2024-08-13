@@ -13,4 +13,6 @@ export interface AppState {
   setTempSummary;
   craft;
   setCraft;
+  toggleView;
+  setToggleView;
 }

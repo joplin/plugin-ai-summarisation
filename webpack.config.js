@@ -17,8 +17,6 @@ const tar = require("tar");
 const glob = require("glob");
 const execSync = require("child_process").execSync;
 const allPossibleCategories = require("@joplin/lib/pluginCategories.json");
-const { PyodidePlugin } = require("@pyodide/webpack-plugin");
-const { IgnorePlugin } = require("webpack");
 
 const rootDir = path.resolve(__dirname);
 const userConfigFilename = "./plugin.config.json";
@@ -223,8 +221,6 @@ function onBuildCompleted() {
   }
 }
 
-const TerserPlugin = require("terser-webpack-plugin");
-
 const baseConfig = {
   mode: "production",
   target: "node",
@@ -236,23 +232,9 @@ const baseConfig = {
         use: "ts-loader",
         exclude: /node_modules/,
       },
-      {
-        test: /\.node$/,
-        loader: "node-loader",
-      },
     ],
   },
-  optimization: {
-    minimize: true,
-    minimizer: [
-      new TerserPlugin({
-        terserOptions: {
-          compress: true,
-        },
-        exclude: /node_modules/, // Exclude node_modules from being processed by Terser
-      }),
-    ],
-  },
+  // ...userConfig.webpackOverrides,
 };
 
 const pluginConfig = {
@@ -290,13 +272,36 @@ const pluginConfig = {
         },
       ],
     }),
-    new PyodidePlugin(),
   ],
   externals: {
     "node:async_hooks": "commonjs async_hooks",
     child_process: "commonjs child_process",
   },
 };
+
+// These libraries can be included with require(...) or
+// joplin.require(...) from content scripts.
+const externalContentScriptLibraries = [
+	'@codemirror/view',
+	'@codemirror/state',
+	'@codemirror/search',
+	'@codemirror/language',
+	'@codemirror/autocomplete',
+	'@codemirror/commands',
+	'@codemirror/highlight',
+	'@codemirror/lint',
+	'@codemirror/lang-html',
+	'@codemirror/lang-markdown',
+	'@codemirror/language-data',
+	'@lezer/common',
+	'@lezer/markdown',
+	'@lezer/highlight',
+];
+
+const extraScriptExternals = {};
+for (const library of externalContentScriptLibraries) {
+	extraScriptExternals[library] = { commonjs: library };
+}
 
 const extraScriptConfig = {
   ...baseConfig,
@@ -307,6 +312,9 @@ const extraScriptConfig = {
     fallback: moduleFallback,
     extensions: [".js", ".tsx", ".ts", ".json"],
   },
+  // We support requiring @codemirror/... libraries through require('@codemirror/...')
+	externalsType: 'commonjs',
+	externals: extraScriptExternals,
 };
 
 const createArchiveConfig = {

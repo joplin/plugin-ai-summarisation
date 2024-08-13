@@ -1,3 +1,6 @@
 {
-  "extraScripts": ["ui/panel_react/index.tsx"]
+  "extraScripts": ["ui/panel_react/index.tsx", "worker.ts"],
+  "webpackOverrides": {
+		"target": "web"
+	}
 }

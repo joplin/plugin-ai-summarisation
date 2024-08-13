@@ -7,7 +7,7 @@ const MainTitle = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 5px;
+  gap: 3px;
   font-size: 28px;
   font-weight: 600;
 `;
@@ -17,7 +17,7 @@ export default function MainHeader() {
     <div className="main-header">
       <MainTitle>
         <FaRobot />
-        Joplin AI - Summarization
+        Summarise Your Notes!
       </MainTitle>
     </div>
   );

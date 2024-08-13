@@ -16,9 +16,34 @@ export class LSAHandler extends AIHandler {
     const binaryMatrix = this.createBinaryMatrix(processedSentences);
     const { U, S, V } = this.constructSVD(binaryMatrix);
     const scores = this.scoreSentences(U, S, sentences, topN);
-    const result = scores.map((item) => item.sentence).join(" ");
 
-    return result;
+    const groupedSentences = this.groupSimilarSentences(scores);
+    const summary = groupedSentences.map(group => group.join(" ")).join("\n\n");
+
+    return summary;
+  }
+
+  groupSimilarSentences(scores, similarityThreshold = 0.5) {
+    const groups = [];
+    let currentGroup = [scores[0].sentence];
+
+    for (let i = 1; i < scores.length; i++) {
+      const prevSentence = scores[i - 1];
+      const currentSentence = scores[i];
+
+      if (Math.abs(prevSentence.score - currentSentence.score) < similarityThreshold) {
+        currentGroup.push(currentSentence.sentence);
+      } else {
+        groups.push(currentGroup);
+        currentGroup = [currentSentence.sentence];
+      }
+    }
+
+    if (currentGroup.length > 0) {
+      groups.push(currentGroup);
+    }
+
+    return groups;
   }
 
   predictBatch(note) {

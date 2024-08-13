@@ -9,6 +9,7 @@ import {
 import { summaryReducer } from "./reducers/summaryReducer";
 import { craftedReducer } from "./reducers/craftReducer";
 import { AppState } from "./models/AppState";
+import { ToggleView } from "./models/ToggleView";
 
 const AppContext = createContext<AppState | undefined>(undefined);
 
@@ -29,6 +30,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [tempSummary, setTempSummary] = useState<string | null>(null);
   const [summaryState, dispatchSummary] = useReducer(summaryReducer, {});
   const [craft, setCraft] = useReducer(craftedReducer, { tempSummary: "" });
+  const [toggleView, setToggleView] = useState<ToggleView>("list");
 
   return (
     <AppContext.Provider
@@ -45,6 +47,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         setTempSummary,
         craft,
         setCraft,
+        toggleView,
+        setToggleView,
       }}
     >
       {children}

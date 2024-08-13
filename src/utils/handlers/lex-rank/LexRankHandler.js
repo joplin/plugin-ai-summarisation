@@ -40,10 +40,47 @@ export class LexRankHandler extends AIHandler {
     );
 
     const topSentences = this.rankSentences(scores, sentences, topN);
-    const summary = topSentences.map((item) => item.sentence).join(" ");
+
+    console.log(`TOP SENTENCES: ${JSON.stringify(topSentences)}`);
+    console.log(" ");
+    console.log(" ");
+    //const summary = topSentences.map((item) => item.sentence).join(" ");
+    const groupedSentences = this.groupSimilarSentences(topSentences);
+    const summary = groupedSentences.map(group =>
+      group.map(item => item.sentence).join(" ")
+    ).join("\n\n");
 
     return summary;
   }
+
+  groupSimilarSentences(topSentences, similarityThreshold = 0.6) {
+    const groups = [];
+    let currentGroup = [topSentences[0]];
+  
+    for (let i = 1; i < topSentences.length; i++) {
+      const prevSentence = topSentences[i - 1];
+      const currentSentence = topSentences[i];
+  
+      const similarityScore = this.calculateIdfModifiedCosine(
+        prevSentence.sentence.split(" "),
+        currentSentence.sentence.split(" ")
+      );
+  
+      if (similarityScore >= similarityThreshold) {
+        currentGroup.push(currentSentence);
+      } else {
+        groups.push(currentGroup);
+        currentGroup = [currentSentence];
+      }
+    }
+  
+    if (currentGroup.length > 0) {
+      groups.push(currentGroup);
+    }
+  
+    return groups;
+  }
+  
 
   predictBatch(note) {
     const { sentences, processedSentences } = this.preprocessNote(note);
@@ -198,16 +235,26 @@ export class LexRankHandler extends AIHandler {
 
   rankSentences(scores, sentences, topN) {
     const averageScore = scores.reduce((a, b) => a + b, 0) / scores.length;
-
+  
+    let seenSentences = new Set();
+  
     const topSentences = scores
       .map((score, index) => ({ score, sentence: sentences[index] }))
       .filter((item) => item.score >= averageScore)
       .sort((a, b) => b.score - a.score)
       .slice(0, topN)
+      .filter((item) => {
+        if (seenSentences.has(item.sentence)) {
+          return false;
+        } else {
+          seenSentences.add(item.sentence);
+          return true;
+        }
+      })
       .sort(
         (a, b) => sentences.indexOf(a.sentence) - sentences.indexOf(b.sentence),
       );
-
+  
     return topSentences;
   }
 }

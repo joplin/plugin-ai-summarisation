@@ -14,6 +14,7 @@ export class SummarisationPanel {
   public panelInstance;
   private sendSummary;
   private sendSummaryObjects;
+  private sendSelectedNote;
   private sendSelectedNoteId;
   private sendNoteContent;
 
@@ -22,6 +23,7 @@ export class SummarisationPanel {
     this.sendSummary = null;
     this.sendSummaryObjects = null;
     this.sendNoteContent = null;
+    this.sendSelectedNote = null;
     this.sendSelectedNoteId = null;
   }
 
@@ -30,7 +32,7 @@ export class SummarisationPanel {
   }
 
   async hidePanel() {
-    await joplin.views.panels.hide(this.panelInstance());
+    await joplin.views.panels.hide(this.panelInstance);
   }
 
   private async generatePanelHtml() {
@@ -72,7 +74,7 @@ export class SummarisationPanel {
           await joplin.views.panels.hide(this.panelInstance);
         } else {
           await joplin.views.panels.show(this.panelInstance);
-          this.sendSummaryObjectsData();
+          await this.sendSummaryObjectsData();
         }
       },
     })
@@ -83,6 +85,13 @@ export class SummarisationPanel {
       MenuItemLocation.View,
       { accelerator: 'CmdOrCtrl+Shift+F' },
     )
+
+    joplin.workspace.onNoteSelectionChange(async() => {
+      const selectedNote = await joplin.workspace.selectedNote();
+      if (this.sendSelectedNote && selectedNote) {
+        this.openNoteInPanel();
+      }
+    });
   }
 
   async fetchAllNotebooks() {
@@ -171,6 +180,14 @@ export class SummarisationPanel {
     this.sendSummaryObjects({ summaryObjects: summaryObjects });
   }
 
+  public async openNoteInPanel() {
+    if(this.sendSelectedNote) {
+      const selectedNote = await joplin.workspace.selectedNote();
+
+      this.sendSelectedNote({ selectedNote: selectedNote });
+    }
+  }
+
   private async runPredictionSummary(
     length: string,
     algorithm: string,
@@ -183,11 +200,14 @@ export class SummarisationPanel {
 
     let kmeansLength = parseInt(length);
     if (algorithm === "kmeans") {
-      if (noteBody.length <= 200) {
+      if (noteBody.length <= 250) {
         kmeansLength = 3;
       }
-      if (noteBody.length >= 500) {
-        kmeansLength = 16;
+      if (noteBody.length <= 750) {
+        kmeansLength = 6;
+      }
+      if (noteBody.length > 750) {
+        kmeansLength = 12;
       }
     }
 
@@ -224,7 +244,7 @@ export class SummarisationPanel {
     } catch (error) {
       logger.error(`Error in runPredictionSummary: ${error.message}`);
       await joplin.views.dialogs.showMessageBox(
-        `Error in runPredictionSummary: ${error.message}`,
+        `Error in runPredictionSummary for the ${algorithm} (algorithm): ${error.message}`,
       );
       throw error;
     }
@@ -311,8 +331,13 @@ export class SummarisationPanel {
             this.sendNoteContent = resolve;
           });
         }
+        case "openNoteInPanel": {
+          return new Promise((resolve) => {
+            this.sendSelectedNote = resolve;
+          });
+        }
         default: {
-          logger.error("Unknown request from webview");
+          logger.error(`Unknown request from webview: ${JSON.stringify(msg)}`);
         }
       }
     } catch (error) {

@@ -7,6 +7,11 @@ export interface OpenNoteInJoplin {
   noteId: string;
 }
 
+export interface OpenNoteInPanel {
+  type: "openNoteInPanel";
+  noteId: string;
+}
+
 export interface GetNotes {
   type: "getNotes";
 }
@@ -61,4 +66,5 @@ export type Message =
   | StoreSummary
   | RequestSummary
   | RequestSelectedNoteId
-  | RequestNoteContent;
+  | RequestNoteContent
+  | OpenNoteInPanel;
