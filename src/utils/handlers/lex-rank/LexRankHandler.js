@@ -46,9 +46,9 @@ export class LexRankHandler extends AIHandler {
     console.log(" ");
     //const summary = topSentences.map((item) => item.sentence).join(" ");
     const groupedSentences = this.groupSimilarSentences(topSentences);
-    const summary = groupedSentences.map(group =>
-      group.map(item => item.sentence).join(" ")
-    ).join("\n\n");
+    const summary = groupedSentences
+      .map((group) => group.map((item) => item.sentence).join(" "))
+      .join("\n\n");
 
     return summary;
   }
@@ -56,16 +56,16 @@ export class LexRankHandler extends AIHandler {
   groupSimilarSentences(topSentences, similarityThreshold = 0.6) {
     const groups = [];
     let currentGroup = [topSentences[0]];
-  
+
     for (let i = 1; i < topSentences.length; i++) {
       const prevSentence = topSentences[i - 1];
       const currentSentence = topSentences[i];
-  
+
       const similarityScore = this.calculateIdfModifiedCosine(
         prevSentence.sentence.split(" "),
-        currentSentence.sentence.split(" ")
+        currentSentence.sentence.split(" "),
       );
-  
+
       if (similarityScore >= similarityThreshold) {
         currentGroup.push(currentSentence);
       } else {
@@ -73,14 +73,13 @@ export class LexRankHandler extends AIHandler {
         currentGroup = [currentSentence];
       }
     }
-  
+
     if (currentGroup.length > 0) {
       groups.push(currentGroup);
     }
-  
+
     return groups;
   }
-  
 
   predictBatch(note) {
     const { sentences, processedSentences } = this.preprocessNote(note);
@@ -235,9 +234,9 @@ export class LexRankHandler extends AIHandler {
 
   rankSentences(scores, sentences, topN) {
     const averageScore = scores.reduce((a, b) => a + b, 0) / scores.length;
-  
+
     let seenSentences = new Set();
-  
+
     const topSentences = scores
       .map((score, index) => ({ score, sentence: sentences[index] }))
       .filter((item) => item.score >= averageScore)
@@ -254,7 +253,7 @@ export class LexRankHandler extends AIHandler {
       .sort(
         (a, b) => sentences.indexOf(a.sentence) - sentences.indexOf(b.sentence),
       );
-  
+
     return topSentences;
   }
 }

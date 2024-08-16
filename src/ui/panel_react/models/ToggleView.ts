@@ -1,1 +1,1 @@
-export type ToggleView = "list"  | "tree";
+export type ToggleView = "list" | "tree";

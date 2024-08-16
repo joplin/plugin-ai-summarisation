@@ -234,7 +234,6 @@ const baseConfig = {
       },
     ],
   },
-  // ...userConfig.webpackOverrides,
 };
 
 const pluginConfig = {
@@ -282,29 +281,30 @@ const pluginConfig = {
 // These libraries can be included with require(...) or
 // joplin.require(...) from content scripts.
 const externalContentScriptLibraries = [
-	'@codemirror/view',
-	'@codemirror/state',
-	'@codemirror/search',
-	'@codemirror/language',
-	'@codemirror/autocomplete',
-	'@codemirror/commands',
-	'@codemirror/highlight',
-	'@codemirror/lint',
-	'@codemirror/lang-html',
-	'@codemirror/lang-markdown',
-	'@codemirror/language-data',
-	'@lezer/common',
-	'@lezer/markdown',
-	'@lezer/highlight',
+  "@codemirror/view",
+  "@codemirror/state",
+  "@codemirror/search",
+  "@codemirror/language",
+  "@codemirror/autocomplete",
+  "@codemirror/commands",
+  "@codemirror/highlight",
+  "@codemirror/lint",
+  "@codemirror/lang-html",
+  "@codemirror/lang-markdown",
+  "@codemirror/language-data",
+  "@lezer/common",
+  "@lezer/markdown",
+  "@lezer/highlight",
 ];
 
 const extraScriptExternals = {};
 for (const library of externalContentScriptLibraries) {
-	extraScriptExternals[library] = { commonjs: library };
+  extraScriptExternals[library] = { commonjs: library };
 }
 
 const extraScriptConfig = {
   ...baseConfig,
+  target: "web", // Overriding the target for extra scripts to "web"
   resolve: {
     alias: {
       api: path.resolve(__dirname, "api"),
@@ -313,8 +313,8 @@ const extraScriptConfig = {
     extensions: [".js", ".tsx", ".ts", ".json"],
   },
   // We support requiring @codemirror/... libraries through require('@codemirror/...')
-	externalsType: 'commonjs',
-	externals: extraScriptExternals,
+  externalsType: "commonjs",
+  externals: extraScriptExternals,
 };
 
 const createArchiveConfig = {

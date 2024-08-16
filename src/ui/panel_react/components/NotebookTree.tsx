@@ -52,12 +52,8 @@ interface NotebookProps {
 
 export default function NotebookTree({ notebook, level = 0 }: NotebookProps) {
   const [expanded, setExpanded] = useState(true);
-  const {
-    summaryState,
-    setView,
-    setSelectedNoteId,
-    setSelectedNoteTitle,
-  } = useAppContext();
+  const { summaryState, setView, setSelectedNoteId, setSelectedNoteTitle } =
+    useAppContext();
 
   const toggleExpand = () => {
     setExpanded(!expanded);

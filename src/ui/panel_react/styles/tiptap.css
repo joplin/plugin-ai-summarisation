@@ -20,7 +20,7 @@
     background-color: unset;
 
     &:hover {
-      background-color: #C5EFFF;
+      background-color: #c5efff;
       border-radius: 0.7rem;
       font-weight: 600;
     }

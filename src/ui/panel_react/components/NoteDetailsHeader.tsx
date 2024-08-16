@@ -11,7 +11,7 @@ const BackButton = styled.div`
   gap: 5px;
   margin-bottom: 20px;
   &:hover {
-    color: #C5EFFF;
+    color: #c5efff;
   }
 `;
 

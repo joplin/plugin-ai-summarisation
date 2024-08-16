@@ -55,6 +55,15 @@ export interface RequestSelectedNoteId {
   type: "requestSelectedNoteId";
 }
 
+export interface RequestLLMSummary {
+  type: "requestLLMSummary";
+}
+
+export interface PredictLLMSummary {
+  type: "predictLLMSummary";
+  noteId: string;
+}
+
 export type Message =
   | InitPanel
   | OpenNoteInJoplin
@@ -67,4 +76,6 @@ export type Message =
   | RequestSummary
   | RequestSelectedNoteId
   | RequestNoteContent
-  | OpenNoteInPanel;
+  | OpenNoteInPanel
+  | RequestLLMSummary
+  | PredictLLMSummary;

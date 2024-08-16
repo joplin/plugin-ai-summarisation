@@ -24,7 +24,7 @@ export class KMeansClustering extends AIHandler {
       assignments,
       centroids,
     );
-    return summary.join("\n\n");  // Use line breaks between grouped sentences
+    return summary.join("\n\n"); // Use line breaks between grouped sentences
   }
 
   predictBatch(note) {
@@ -163,13 +163,21 @@ export class KMeansClustering extends AIHandler {
 
     clusters.forEach((cluster) => {
       cluster.sort((a, b) => {
-        const distanceA = math.distance(a.vector, centroids[clusters.indexOf(cluster)]);
-        const distanceB = math.distance(b.vector, centroids[clusters.indexOf(cluster)]);
+        const distanceA = math.distance(
+          a.vector,
+          centroids[clusters.indexOf(cluster)],
+        );
+        const distanceB = math.distance(
+          b.vector,
+          centroids[clusters.indexOf(cluster)],
+        );
         return distanceA - distanceB;
       });
 
-      const representativeSentences = cluster.slice(0, 2).map(item => item.sentence);
-      
+      const representativeSentences = cluster
+        .slice(0, 2)
+        .map((item) => item.sentence);
+
       summary.push(...representativeSentences);
     });
 

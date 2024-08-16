@@ -18,7 +18,9 @@ export class LSAHandler extends AIHandler {
     const scores = this.scoreSentences(U, S, sentences, topN);
 
     const groupedSentences = this.groupSimilarSentences(scores);
-    const summary = groupedSentences.map(group => group.join(" ")).join("\n\n");
+    const summary = groupedSentences
+      .map((group) => group.join(" "))
+      .join("\n\n");
 
     return summary;
   }
@@ -31,7 +33,10 @@ export class LSAHandler extends AIHandler {
       const prevSentence = scores[i - 1];
       const currentSentence = scores[i];
 
-      if (Math.abs(prevSentence.score - currentSentence.score) < similarityThreshold) {
+      if (
+        Math.abs(prevSentence.score - currentSentence.score) <
+        similarityThreshold
+      ) {
         currentGroup.push(currentSentence.sentence);
       } else {
         groups.push(currentGroup);

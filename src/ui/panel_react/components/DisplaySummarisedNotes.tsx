@@ -1,8 +1,7 @@
-import * as React from 'react';
-import styled from 'styled-components';
+import * as React from "react";
+import styled from "styled-components";
 import { useAppContext } from "../AppContext";
 import { CgNotes } from "react-icons/cg";
-
 
 const NoteElement = styled.div<{ isSummarized: boolean }>`
   display: flex;
@@ -25,40 +24,36 @@ const NoteTitle = styled.div`
 `;
 
 export default function DisplaySummarisedNotes({ notebook }) {
-    const {
-        summaryState,
-        setView,
-        setSelectedNoteId,
-        setSelectedNoteTitle,
-    } = useAppContext();
+  const { summaryState, setView, setSelectedNoteId, setSelectedNoteTitle } =
+    useAppContext();
 
-    const handleNoteClick = async (id: string, noteTitle: string) => {
-        setSelectedNoteTitle(noteTitle);
-        setSelectedNoteId(id);
-        setView("noteDetails");
-        await webviewApi.postMessage({ type: "openNoteInJoplin", noteId: id });
-    };
+  const handleNoteClick = async (id: string, noteTitle: string) => {
+    setSelectedNoteTitle(noteTitle);
+    setSelectedNoteId(id);
+    setView("noteDetails");
+    await webviewApi.postMessage({ type: "openNoteInJoplin", noteId: id });
+  };
 
-    return(
-        <div>
-            {notebook.notes.map((note) => {
-                if(note.id in summaryState) {
-                    return (
-                        <NoteElement
-                            key={note.id}
-                            onClick={() => handleNoteClick(note.id, note.title)}
-                            isSummarized={note.id in summaryState}
-                        >
-                        <CgNotes />
-                        <NoteTitle>{note.title}</NoteTitle>
-                        </NoteElement>
-                    )
-                }
-                return null;
-            })}
-            {notebook.notebooks.map((subNotebook) => (
-                <DisplaySummarisedNotes key={subNotebook.id} notebook={subNotebook} />
-            ))}
-        </div>
-    )
+  return (
+    <div>
+      {notebook.notes.map((note) => {
+        if (note.id in summaryState) {
+          return (
+            <NoteElement
+              key={note.id}
+              onClick={() => handleNoteClick(note.id, note.title)}
+              isSummarized={note.id in summaryState}
+            >
+              <CgNotes />
+              <NoteTitle>{note.title}</NoteTitle>
+            </NoteElement>
+          );
+        }
+        return null;
+      })}
+      {notebook.notebooks.map((subNotebook) => (
+        <DisplaySummarisedNotes key={subNotebook.id} notebook={subNotebook} />
+      ))}
+    </div>
+  );
 }

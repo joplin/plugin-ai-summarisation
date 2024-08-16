@@ -8,7 +8,12 @@
   "author": "HahaBill",
   "homepage_url": "https://discourse.joplinapp.org/t/about-the-summarize-with-ai-category/37955",
   "repository_url": "https://github.com/joplin/plugin-ai-summarisation",
-  "keywords": ["web-development", "nlp-machine-learning", "artificial-intelligence", "summarisation"],
+  "keywords": [
+    "web-development",
+    "nlp-machine-learning",
+    "artificial-intelligence",
+    "summarisation"
+  ],
   "categories": [],
   "screenshots": [],
   "icons": {}

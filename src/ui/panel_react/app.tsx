@@ -75,13 +75,15 @@ export default function App() {
       setSelectedNoteId(response["noteId"]);
     }
     async function noteOnChange() {
-      const response = await webviewApi.postMessage({ type: "openNoteInPanel" });
+      const response = await webviewApi.postMessage({
+        type: "openNoteInPanel",
+      });
       setView("noteDetails");
       setSelectedNoteId(response["selectedNote"]["id"]);
       setSelectedNoteTitle(response["selectedNote"]["title"]);
     }
-    fetchData();
     fetchSummaryObjects();
+    fetchData();
     requestSummary();
     noteOnChange();
   }, [selectedNoteId]);
@@ -98,9 +100,7 @@ export default function App() {
         )}
       </Header>
       <Body>
-        {view === "home" &&
-          <Home notebookTree={notebookTree} />
-        }
+        {view === "home" && <Home notebookTree={notebookTree} />}
         {view === "noteDetails" && selectedNoteId !== null && (
           <NoteDetails key={selectedNoteId} />
         )}

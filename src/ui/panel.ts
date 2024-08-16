@@ -1,6 +1,6 @@
 import joplin from "api";
 import type { Message } from "./msgTypes";
-import { MenuItemLocation, ModelType } from "api/types";
+import { MenuItemLocation, ModelType, ToolbarButtonLocation } from "api/types";
 
 import { LexRankHandler } from "../utils/handlers/lex-rank/LexRankHandler";
 import { LSAHandler } from "../utils/handlers/lsa/LSAHandler";
@@ -17,6 +17,7 @@ export class SummarisationPanel {
   private sendSelectedNote;
   private sendSelectedNoteId;
   private sendNoteContent;
+  private sendSummaryByLLM;
 
   constructor() {
     this.handleMessage = this.handleMessage.bind(this);
@@ -25,6 +26,7 @@ export class SummarisationPanel {
     this.sendNoteContent = null;
     this.sendSelectedNote = null;
     this.sendSelectedNoteId = null;
+    this.sendSummaryByLLM = null;
   }
 
   async showPanel() {
@@ -43,55 +45,60 @@ export class SummarisationPanel {
   }
 
   async registerPanel() {
-    this.panelInstance = await joplin.views.panels.create("summary-ai-panel");
-    const panelHtml: string = await this.generatePanelHtml();
-    await joplin.views.panels.setHtml(this.panelInstance, panelHtml);
+    try {
+      this.panelInstance = await joplin.views.panels.create("summary-ai-panel");
+      const panelHtml: string = await this.generatePanelHtml();
+      await joplin.views.panels.setHtml(this.panelInstance, panelHtml);
 
-    const installationDir = await joplin.plugins.installationDir();
-    const files = await fs.promises.readdir(
-      installationDir + "/ui/panel_react/styles/",
-    );
-    const cssFiles = files
-      .filter((file) => file.endsWith(".css"))
-      .map((file) => "ui/panel_react/styles/" + file);
+      const installationDir = await joplin.plugins.installationDir();
+      const files = await fs.promises.readdir(
+        installationDir + "/ui/panel_react/styles/",
+      );
+      const cssFiles = files
+        .filter((file) => file.endsWith(".css"))
+        .map((file) => "ui/panel_react/styles/" + file);
 
-    for (const css of cssFiles) {
-      await joplin.views.panels.addScript(this.panelInstance, css);
-    }
-
-    await joplin.views.panels.addScript(
-      this.panelInstance,
-      "./ui/panel_react/index.js",
-    );
-    await joplin.views.panels.show(this.panelInstance);
-    joplin.views.panels.onMessage(this.panelInstance, this.handleMessage);
-
-    joplin.commands.register({
-      name: 'ai.toggle_panel',
-      label: 'Toggle Joplin AI Summarization panel',
-      execute: async () => {
-        if (await joplin.views.panels.visible(this.panelInstance)) {
-          await joplin.views.panels.hide(this.panelInstance);
-        } else {
-          await joplin.views.panels.show(this.panelInstance);
-          await this.sendSummaryObjectsData();
-        }
-      },
-    })
-
-    joplin.views.menuItems.create(
-      'ai.toggle_panel.menu_item',
-      'ai.toggle_panel',
-      MenuItemLocation.View,
-      { accelerator: 'CmdOrCtrl+Shift+F' },
-    )
-
-    joplin.workspace.onNoteSelectionChange(async() => {
-      const selectedNote = await joplin.workspace.selectedNote();
-      if (this.sendSelectedNote && selectedNote) {
-        this.openNoteInPanel();
+      for (const css of cssFiles) {
+        await joplin.views.panels.addScript(this.panelInstance, css);
       }
-    });
+
+      await joplin.views.panels.addScript(
+        this.panelInstance,
+        "./ui/panel_react/index.js",
+      );
+      await joplin.views.panels.show(this.panelInstance);
+      joplin.views.panels.onMessage(this.panelInstance, this.handleMessage);
+
+      await joplin.commands.register({
+        name: "ai.toggle_panel",
+        label: "Toggle Joplin AI Summarization panel",
+        iconName: "fas fa-robot",
+        execute: async () => {
+          if (await joplin.views.panels.visible(this.panelInstance)) {
+            await joplin.views.panels.hide(this.panelInstance);
+          } else {
+            await joplin.views.panels.show(this.panelInstance);
+            await this.sendSummaryObjectsData();
+          }
+        },
+      });
+
+      await joplin.views.menuItems.create(
+        "ai.toggle_panel.menu_item",
+        "ai.toggle_panel",
+        MenuItemLocation.View,
+        { accelerator: "CmdOrCtrl+Shift+F" },
+      );
+
+      await joplin.workspace.onNoteSelectionChange(async () => {
+        const selectedNote = await joplin.workspace.selectedNote();
+        if (this.sendSelectedNote && selectedNote) {
+          this.openNoteInPanel();
+        }
+      });
+    } catch(error) {
+      throw new Error(`Error while registering the panel: ${error}`);
+    }
   }
 
   async fetchAllNotebooks() {
@@ -178,14 +185,25 @@ export class SummarisationPanel {
       }
     }
     this.sendSummaryObjects({ summaryObjects: summaryObjects });
+    return;
   }
 
   public async openNoteInPanel() {
-    if(this.sendSelectedNote) {
+    if (this.sendSelectedNote) {
       const selectedNote = await joplin.workspace.selectedNote();
 
       this.sendSelectedNote({ selectedNote: selectedNote });
     }
+  }
+
+  private async runPredictionLLMSummary(noteId) {
+    const note = await joplin.data.get(["notes", noteId], {
+      fields: ["id", "title", "body"],
+    });
+    const noteBody = note["body"];
+    const result = await joplin.commands.execute("transformers:summarise", noteBody);
+
+    return result[0]['summary_text'];
   }
 
   private async runPredictionSummary(
@@ -278,8 +296,9 @@ export class SummarisationPanel {
           return { notebookTree };
         }
         case "requestSummaryObjects": {
-          return new Promise((resolve) => {
+          return new Promise(async(resolve) => {
             this.sendSummaryObjects = resolve;
+            await this.sendSummaryObjectsData();
           });
         }
         case "updateSummaryHTML": {
@@ -303,9 +322,18 @@ export class SummarisationPanel {
           );
           return { prediction: result };
         }
+        case "predictLLMSummary": {
+          const result = await this.runPredictionLLMSummary(msg.noteId);
+          return { prediction: result };
+        }
         case "requestSummary": {
           return new Promise((resolve) => {
             this.sendSummary = resolve;
+          });
+        }
+        case "requestLLMSummary": {
+          return new Promise((resolve) => {
+            this.sendSummaryByLLM = resolve;
           });
         }
         case "requestSelectedNoteId": {

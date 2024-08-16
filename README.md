@@ -56,22 +56,22 @@ flowchart LR
    D -.-> O[Right-click on the notebook]
    O -.-> P[Summarize the notebook]
 ```
+
 #### Panel
+
 Clicking on the notes in the panel will also open notes in Joplin. There, you can craft your own summary by adjusting its length and generating multiple versions of summaries by performing various algorithms (LexRank, TextRank, LSA, KMeans Clustering) to find the best summary.
 
 #### Joplin App
+
 In Joplin, you can summarise notes by using:
 
 1. Note Context Menu
 2. Notebook Context Menu
 3. Editor Context Menu
 
-
 ### 2.3 📹 Video Demonstration
 
 https://github.com/user-attachments/assets/c5e81bf7-42d3-47a4-b11d-7972e6edb762
-
-
 
 # About the plugin
 
@@ -80,7 +80,6 @@ https://github.com/user-attachments/assets/c5e81bf7-42d3-47a4-b11d-7972e6edb762
 #### b. Google Summer of Code 2024: https://summerofcode.withgoogle.com/programs/2024/projects/Ble8LKDb
 
 #### c. Project Website: https://discourse.joplinapp.org/c/gsoc-projects/summarize-ai/35
-
 
 # References
 
