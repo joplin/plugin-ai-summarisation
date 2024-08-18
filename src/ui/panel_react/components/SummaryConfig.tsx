@@ -286,7 +286,7 @@ export default function SummaryConfig() {
                     usually does — i.e., conceive the text, compare it with their memory and related
                     information, and then re-create its core in a brief text
                     <br/>
-                    We use <Code style={{ fontSize: "11px" }} colorScheme='yellow' >google/flan_t5_base</Code> for the inference. It will takes approximately on average <b>45 seconds to 2 minutes</b> to generate the summary
+                    We use <Code style={{ fontSize: "11px" }} colorScheme='yellow' >google/flan_t5_small</Code> for the inference. It will takes approximately on average <b>30 seconds to 2 minutes</b> to generate the summary
                 </p>
             </Alert>
         }
