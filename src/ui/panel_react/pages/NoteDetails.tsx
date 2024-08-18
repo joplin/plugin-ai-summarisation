@@ -16,7 +16,15 @@ export default function NoteDetails() {
   const { summaryState, dispatchSummary, selectedNoteId } = useAppContext();
 
   const displaySummary = useCallback((): string => {
-    return summaryState[selectedNoteId].summary;
+    try {
+      if (summaryState[selectedNoteId] && summaryState[selectedNoteId].summary) {
+        return summaryState[selectedNoteId].summary;
+      } else {
+        return "Error in fetching a summary prediction. You have to pick another algorithm to make the plugin working again."
+      }
+    } catch(error) {
+      throw new Error(`Error when displaying summary in Note Details page: ${error}`);
+    }
   }, [selectedNoteId]);
 
   if (!(selectedNoteId in summaryState)) {
@@ -35,6 +43,7 @@ export default function NoteDetails() {
         crafting={false}
         selectedNoteId={selectedNoteId}
         dispatchSummary={dispatchSummary}
+        summaryTitle={summaryState[selectedNoteId].summaryTitle}
       />
     </NoteDetailsContainer>
   );

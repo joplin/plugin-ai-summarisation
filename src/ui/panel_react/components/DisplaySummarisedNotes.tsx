@@ -41,11 +41,11 @@ export default function DisplaySummarisedNotes({ notebook }) {
           return (
             <NoteElement
               key={note.id}
-              onClick={() => handleNoteClick(note.id, note.title)}
+              onClick={() => handleNoteClick(note.id, summaryState[note.id].summaryTitle)}
               isSummarized={note.id in summaryState}
             >
               <CgNotes />
-              <NoteTitle>{note.title}</NoteTitle>
+              <NoteTitle>{summaryState[note.id].summaryTitle}</NoteTitle>
             </NoteElement>
           );
         }

@@ -1,5 +1,8 @@
 .tiptap {
   font-size: 14px;
+  padding: 10px;
+  border-width: 0.3px;
+  border-color: rgb(222, 234, 255);
 }
 
 .tiptap blockquote {
@@ -26,12 +29,12 @@
     }
 
     &.is-active {
-      background-color: #ffaa00;
+      background-color: #ffe6b4;
       border-radius: 0.7rem;
       font-weight: 800;
 
       &:hover {
-        background-color: rgb(255, 128, 0);
+        background-color: rgb(255, 227, 200);
         font-weight: 600;
         border-radius: 0.7rem;
       }

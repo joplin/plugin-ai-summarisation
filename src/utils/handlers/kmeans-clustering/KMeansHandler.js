@@ -14,9 +14,16 @@ export class KMeansClustering extends AIHandler {
 
   async predict(note, k = 6) {
     logger.info("KMeans Clustering: Starting the process...");
-    const { sentences, processedSentences } = preprocessNote(note);
+    const { sentences, processedSentences } = preprocessNote(note.replace(/\[.*?\]/g, ''));
     const tfidf = getTFIDF(processedSentences);
     const sentenceVectors = this.vectorizeSentences(processedSentences, tfidf);
+    if (note.length <= 600) {
+      k = 3;
+    } else if (note.length <= 1500) {
+      k = 5;
+    } else {
+      k = 8;
+    }
     const { centroids, assignments } = this.kmeans(sentenceVectors, k);
     const summary = this.extractSummary(
       sentences,
@@ -28,12 +35,22 @@ export class KMeansClustering extends AIHandler {
   }
 
   predictBatch(note) {
-    const { sentences, processedSentences } = preprocessNote(note);
+    const { sentences, processedSentences } = preprocessNote(note.replace(/\[.*?\]/g, ''));
     const tfidf = getTFIDF(processedSentences);
     const sentenceVectors = this.vectorizeSentences(processedSentences, tfidf);
 
+    let kMeansLength = 3;
+
+    if (note.length <= 600) {
+      kMeansLength = 3;
+    } else if (note.length <= 1500) {
+      kMeansLength = 5;
+    } else {
+      kMeansLength = 8;
+    }
+
     let { centroids: centroidsShort, assignments: assignmentsShort } =
-      this.kmeans(sentenceVectors, 6);
+      this.kmeans(sentenceVectors, kMeansLength);
     const summaryShort = this.extractSummary(
       sentences,
       sentenceVectors,
@@ -42,7 +59,7 @@ export class KMeansClustering extends AIHandler {
     );
 
     let { centroids: centroidsMedium, assignments: assignmentsMedium } =
-      this.kmeans(sentenceVectors, 10);
+      this.kmeans(sentenceVectors, kMeansLength);
     const summaryMedium = this.extractSummary(
       sentences,
       sentenceVectors,
@@ -51,7 +68,7 @@ export class KMeansClustering extends AIHandler {
     );
 
     let { centroids: centroidsLong, assignments: assignmentsLong } =
-      this.kmeans(sentenceVectors, 14);
+      this.kmeans(sentenceVectors, kMeansLength);
     const summaryLong = this.extractSummary(
       sentences,
       sentenceVectors,
@@ -180,8 +197,6 @@ export class KMeansClustering extends AIHandler {
 
       summary.push(...representativeSentences);
     });
-
-    console.log(`KMEANS Clustering summary: ${summary}`);
 
     return summary;
   }

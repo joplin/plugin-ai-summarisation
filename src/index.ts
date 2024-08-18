@@ -42,14 +42,27 @@ joplin.plugins.register({
       });
 
       // Dialogs
+
+      const dialogButtons = [
+        {
+          id: 'ok',
+          title: 'Save'
+          
+        },
+        {
+          id: 'cancel',
+          title: 'Cancel',
+        },
+      ]
+
       const noteDialog = new NoteDialog("SummarizeSingleNote");
-      noteDialog.registerDialog();
+      noteDialog.registerDialog(dialogButtons);
 
       const editorDialog = new EditorDialog("SummarizeSelectedText", dataDir);
-      editorDialog.registerDialog();
+      editorDialog.registerDialog(dialogButtons);
 
       const notebookDialog = new NotebookDialog("SummarizeNotebook");
-      notebookDialog.registerDialog();
+      notebookDialog.registerDialog(dialogButtons);
 
       // Panel
       const panel = new SummarisationPanel();

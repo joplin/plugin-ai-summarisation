@@ -42,50 +42,56 @@ export default function App() {
   const [notebookTree, setNotebookTree] = React.useState([]);
 
   useEffect(() => {
-    async function fetchData() {
-      const response = await webviewApi.postMessage({ type: "initPanel" });
-      setNotebookTree(response["notebookTree"]);
-    }
-    async function fetchSummaryObjects() {
-      const response = await webviewApi.postMessage({
-        type: "requestSummaryObjects",
-      });
-      for (const summaryObj of response["summaryObjects"]) {
-        if (!(summaryObj["noteId"] in summaryState)) {
-          dispatchSummary({
-            type: "addSummary",
-            payload: {
-              noteId: summaryObj["noteId"],
-              summary: summaryObj["summary"],
-            },
-          });
+    try {
+      async function fetchData() {
+        const response = await webviewApi.postMessage({ type: "initPanel" });
+        setNotebookTree(response["notebookTree"]);
+      }
+      async function fetchSummaryObjects() {
+        const response = await webviewApi.postMessage({
+          type: "requestSummaryObjects",
+        });
+        for (const summaryObj of response["summaryObjects"]) {
+
+          if (!(summaryObj["noteId"] in summaryState)) {
+            dispatchSummary({
+              type: "addSummary",
+              payload: {
+                noteId: summaryObj["noteId"],
+                summary: summaryObj["summary"],
+                summaryTitle: summaryObj["summaryTitle"],
+              },
+            });
+          }
         }
       }
+      async function requestSummary() {
+        const response = await webviewApi.postMessage({ type: "requestSummary" });
+        dispatchSummary({
+          type: "addSummary",
+          payload: {
+            noteId: response["noteId"],
+            summary: response["summary"],
+            summaryTitle: response["summaryTitle"],
+          },
+        });
+        setView("noteDetails");
+        setSelectedNoteId(response["noteId"]);
+      }
+      async function noteOnChange() {
+        const response = await webviewApi.postMessage({
+          type: "openNoteInPanel",
+        });
+        setView("noteDetails");
+        setSelectedNoteId(response["selectedNote"]["id"]);
+      }
+      fetchSummaryObjects();
+      fetchData();
+      requestSummary();
+      noteOnChange();
+    } catch(error) {
+      throw new Error(`App failed when loading summaries and objects (app.tsx): ${error}`);
     }
-    async function requestSummary() {
-      const response = await webviewApi.postMessage({ type: "requestSummary" });
-      dispatchSummary({
-        type: "addSummary",
-        payload: {
-          noteId: response["noteId"],
-          summary: response["summary"],
-        },
-      });
-      setView("noteDetails");
-      setSelectedNoteId(response["noteId"]);
-    }
-    async function noteOnChange() {
-      const response = await webviewApi.postMessage({
-        type: "openNoteInPanel",
-      });
-      setView("noteDetails");
-      setSelectedNoteId(response["selectedNote"]["id"]);
-      setSelectedNoteTitle(response["selectedNote"]["title"]);
-    }
-    fetchSummaryObjects();
-    fetchData();
-    requestSummary();
-    noteOnChange();
   }, [selectedNoteId]);
 
   return (

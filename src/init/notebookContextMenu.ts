@@ -2,18 +2,12 @@ import joplin from "api";
 import { MenuItemLocation } from "api/types";
 import { NotebookDialog } from "../ui/dialogs";
 import { NotebookInfo } from "src/models/notebook";
-import { SummarisationPanel } from "src/ui/panel";
 
 const SummaryBot = require("summarybot");
 const logger = require("electron-log");
 const userTriggered = true;
 
-async function summarizeNotesRecursively(
-  parentId,
-  allNotes,
-  allNotebooks,
-  panel: SummarisationPanel,
-) {
+async function summarizeNotesRecursively(parentId, allNotes, allNotebooks) {
   if (parentId === null || parentId === undefined) {
     return;
   }
@@ -56,20 +50,11 @@ async function summarizeNotesRecursively(
   }
 
   for (const traverseNotebook of notebooksToContinue) {
-    summarizeNotesRecursively(
-      traverseNotebook["id"],
-      allNotes,
-      allNotebooks,
-      panel,
-    );
+    summarizeNotesRecursively(traverseNotebook["id"], allNotes, allNotebooks);
   }
 }
 
-async function summarizeImmediateChildren(
-  parentId,
-  allNotes,
-  panel: SummarisationPanel,
-) {
+async function summarizeImmediateChildren(parentId, allNotes) {
   if (parentId === null || parentId === undefined) {
     return;
   }
@@ -105,10 +90,7 @@ async function summarizeImmediateChildren(
   }
 }
 
-async function initNotebookContextMenu(
-  notebookDialog: NotebookDialog,
-  panel: SummarisationPanel,
-) {
+async function initNotebookContextMenu(notebookDialog: NotebookDialog) {
   await joplin.commands.register({
     name: "ai.notebookCommandContextMenu.textrank",
     label: "Summarize the notebook",
@@ -125,19 +107,20 @@ async function initNotebookContextMenu(
       const summarizeOption =
         result["formData"]["note-ai-summarization"]["summary-notebook-option"];
 
-      if (summarizeOption === "immediateChildrenNotes") {
-        summarizeImmediateChildren(folderId, allNotes["items"], panel);
-      } else if (summarizeOption === "allNotes") {
-        summarizeNotesRecursively(
-          folderId,
-          allNotes["items"],
-          allNotebooks["items"],
-          panel,
-        );
-      } else {
-        logger.info("Work in progress");
-      }
-    },
+      if(result.id === "ok") {
+
+        if (summarizeOption === "immediateChildrenNotes") {
+          summarizeImmediateChildren(folderId, allNotes["items"]);
+        } else if (summarizeOption === "allNotes") {
+          summarizeNotesRecursively(
+            folderId,
+            allNotes["items"],
+            allNotebooks["items"],
+          );
+        } else {
+          logger.info("Work in progress");
+        }
+      }},
   });
   await joplin.views.menuItems.create(
     "ai.notebookCommandContextMenu",

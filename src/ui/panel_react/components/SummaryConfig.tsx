@@ -76,11 +76,13 @@ export default function SummaryConfig() {
     craft,
     setCraft,
     dispatchSummary,
+    selectedNoteTitle,
   } = useAppContext();
   const [length, setLength] = useState("6");
   const [algorithm, setAlgorithm] = useState("lexRank");
   const [summarisationType, setSummarisationType] = useState("extractive");
   const [generatingLLMSummary, setGeneratingLLMSummary] = useState<boolean>(false);
+  const [summaryTitle, setSummaryTitle] = useState<string>("");
 
   useEffect(() => {
     fetchPrediction();
@@ -115,6 +117,7 @@ export default function SummaryConfig() {
     await webviewApi.postMessage({
       type: "storeSummary",
       noteId: selectedNoteId,
+      summaryTitle: summaryTitle,
       summary: `
     <blockquote>
         <p><span style="color: #ffaa00">
@@ -125,12 +128,18 @@ export default function SummaryConfig() {
     ${craft.tempSummary}
     `,
     });
+    setSummaryTitle(summaryTitle);
   }
 
   const handleInputChange = (event) => {
     const inputValue = event.target.value;
     setCraft({ type: "showCraftedSummary", payload: inputValue });
   };
+
+  const handleInputSummaryTitleChange = (event) => {
+    const inputValue = event.target.value;
+    setSummaryTitle(inputValue);
+  }
 
   const handleBackClick = () => {
     setSelectedNoteId(null);
@@ -158,6 +167,7 @@ export default function SummaryConfig() {
 
             ${craft.tempSummary}
             `,
+        summaryTitle: summaryTitle,
       },
     });
 
@@ -175,9 +185,11 @@ export default function SummaryConfig() {
             Summary Title:
             </h3>
             <Input
+            value={summaryTitle}
+            onChange={handleInputSummaryTitleChange}
             variant="flushed"
             size="sm"
-            placeholder="WORK IN PROGRESS: Write a title for your summary..."
+            placeholder="Write a title for your summary..."
             />
         </SummaryTitleInput>
         <SummarisationTypeRadioGroup>

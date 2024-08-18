@@ -68,7 +68,7 @@ export default function NotebookTree({ notebook, level = 0 }: NotebookProps) {
 
   return (
     <NotebookContainer level={level}>
-      <div className="notebook-title" onClick={toggleExpand}>
+      <div className="notebook-title" style={{ display: "flex", flexDirection: "row", alignItems: "center" }} onClick={toggleExpand}>
         {expanded ? <GoTriangleDown /> : <GoTriangleRight />}
         <GiNotebook />
         <NotebookTitle>{notebook.title}</NotebookTitle>

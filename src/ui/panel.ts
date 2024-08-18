@@ -160,6 +160,7 @@ export class SummarisationPanel {
           summary: summaryObj["summary"],
           noteId: summaryObj["noteId"],
           noteTitle: summaryObj["noteTitle"],
+          summaryTitle: summaryObj["summaryTitle"],
         },
       );
       this.sendSummary = null;
@@ -180,6 +181,7 @@ export class SummarisationPanel {
         note["id"],
         "summaryObj",
       );
+
       if (summaryObj !== undefined && summaryObj !== null) {
         summaryObjects.push(summaryObj);
       }
@@ -306,7 +308,7 @@ export class SummarisationPanel {
             ModelType.Note,
             msg.nodeId,
             "summaryObj",
-            { summary: msg.summaryHTML, noteId: msg.nodeId },
+            { summary: msg.summaryHTML, noteId: msg.nodeId, summaryTitle: msg.summaryTitle },
           );
           break;
         }
@@ -350,7 +352,7 @@ export class SummarisationPanel {
             ModelType.Note,
             msg.noteId,
             "summaryObj",
-            { summary: msg.summary, noteId: msg.noteId },
+            { summary: msg.summary, noteId: msg.noteId, summaryTitle: msg.summaryTitle },
           );
           break;
         }

@@ -53,7 +53,6 @@ async function initTransformersWorker(panelInstance: SummarisationPanel) {
                 };
             });
 
-            console.log(`IN THE COMMAND RETURNED: ${JSON.stringify(result)}`);
             return result;
         },
     });  

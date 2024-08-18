@@ -7,7 +7,7 @@
 }
 
 #joplin-plugin-content {
-  width: 300px;
+  width: 250px;
   height: 200px;
 }
 
@@ -54,6 +54,11 @@
 }
 
 .note-title-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.note-title-info {
   display: flex;
   flex-direction: row;
   gap: 10px;

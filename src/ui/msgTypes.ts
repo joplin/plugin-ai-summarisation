@@ -24,6 +24,7 @@ export interface UpdateSummaryHTML {
   type: "updateSummaryHTML";
   summaryHTML: string;
   nodeId: string;
+  summaryTitle: string;
 }
 
 export interface PredictSummary {
@@ -37,6 +38,7 @@ export interface StoreSummary {
   type: "storeSummary";
   noteId: string;
   summary: string;
+  summaryTitle: string;
 }
 
 export interface RequestNoteContent {

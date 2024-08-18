@@ -25,7 +25,7 @@ export class LexRankHandler extends AIHandler {
   }
 
   predict(note, topN = 10) {
-    const { sentences, processedSentences } = this.preprocessNote(note);
+    const { sentences, processedSentences } = this.preprocessNote(note.replace(/\[.*?\]/g, ''));
     const tf = this.computeTF(processedSentences);
     const idf = this.computeIDF(processedSentences);
     const tfidf = this.computeTFIDF(tf, idf);
@@ -41,9 +41,6 @@ export class LexRankHandler extends AIHandler {
 
     const topSentences = this.rankSentences(scores, sentences, topN);
 
-    console.log(`TOP SENTENCES: ${JSON.stringify(topSentences)}`);
-    console.log(" ");
-    console.log(" ");
     //const summary = topSentences.map((item) => item.sentence).join(" ");
     const groupedSentences = this.groupSimilarSentences(topSentences);
     const summary = groupedSentences
@@ -82,7 +79,7 @@ export class LexRankHandler extends AIHandler {
   }
 
   predictBatch(note) {
-    const { sentences, processedSentences } = this.preprocessNote(note);
+    const { sentences, processedSentences } = this.preprocessNote(note.replace(/\[.*?\]/g, ''));
     const tf = this.computeTF(processedSentences);
     const idf = this.computeIDF(processedSentences);
     const tfidf = this.computeTFIDF(tf, idf);

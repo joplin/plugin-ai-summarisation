@@ -12,7 +12,7 @@ export class LSAHandler extends AIHandler {
   }
 
   predict(note, topN = 50) {
-    const { sentences, processedSentences } = preprocessNote(note);
+    const { sentences, processedSentences } = preprocessNote(note.replace(/\[.*?\]/g, ''));
     const binaryMatrix = this.createBinaryMatrix(processedSentences);
     const { U, S, V } = this.constructSVD(binaryMatrix);
     const scores = this.scoreSentences(U, S, sentences, topN);
@@ -52,7 +52,7 @@ export class LSAHandler extends AIHandler {
   }
 
   predictBatch(note) {
-    const { sentences, processedSentences } = preprocessNote(note);
+    const { sentences, processedSentences } = preprocessNote(note.replace(/\[.*?\]/g, ''));
     const binaryMatrix = this.createBinaryMatrix(processedSentences);
     const { U, S, V } = this.constructSVD(binaryMatrix);
 

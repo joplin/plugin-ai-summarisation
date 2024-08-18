@@ -7,11 +7,11 @@ export const summaryReducer = (
   try {
     switch (action.type) {
       case "addSummary": {
-        const { noteId, summary } = action.payload;
+        const { noteId, summary, summaryTitle } = action.payload;
         const summaryObj: SummaryObject = {
           noteTitle: "",
-          summaryTitle: "",
-          summary: summary,
+          summaryTitle: summaryTitle || "",
+          summary: summary || "",
         };
         return {
           ...state,
@@ -19,13 +19,14 @@ export const summaryReducer = (
         };
       }
       case "updateSummary": {
-        const { noteId, summary } = action.payload;
+        const { noteId, summary, summarytitle } = action.payload;
         if (noteId in state) {
           return {
             ...state,
             [noteId]: {
               ...state[noteId],
               summary: summary,
+              summaryTitle: summarytitle,
             },
           };
         }
