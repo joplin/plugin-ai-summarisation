@@ -12,7 +12,7 @@ env.backends.onnx.wasm.wasmPaths = "../ai/onnx-dist/";
 
 let pipe: (text: string, config: any) => Promise<unknown>;
 
-const classify = async (text: string) => {
+const summarise = async (text: string) => {
   pipe ??= await pipeline("summarization", "Xenova/flan-t5-small");
   let min_length = 250;
   if (text.length <= 5000) {
@@ -30,13 +30,9 @@ const classify = async (text: string) => {
 self.addEventListener("message", async (event) => {
   console.debug("got message", event.data);
 
-  if (event.data.type === "classify") {
+  if (event.data.type === "summarise") {
     postMessage({
-      response: await classify(event.data.text),
+		generatedSummary: await summarise(event.data.text),
     });
-  } else {
-	postMessage({
-		generatedSummary: await classify(event.data.text),
-	});
   }
 });
