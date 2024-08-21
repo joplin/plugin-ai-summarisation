@@ -1,4 +1,4 @@
-# 🤖 Joplin AI - Summarisation
+# 🤖 Summarize your notes with Joplin AI!
 
 ## 1. Introduction
 
