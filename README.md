@@ -75,7 +75,16 @@ Run unit tests by running `npm run test`. The testing framework that we are usin
 
 ### 2.3 📹 Video Demonstration
 
-https://github.com/user-attachments/assets/c5e81bf7-42d3-47a4-b11d-7972e6edb762
+#### 2.3.1 Panel
+
+https://github.com/user-attachments/assets/4f2d1786-b7f2-4cfc-8210-f166dc7888b6
+
+---
+
+#### 2.3.2 Context Menus
+
+https://github.com/user-attachments/assets/4506769c-d2ad-4e97-a1aa-e193aab9ca4d
+
 
 # About the plugin
 
