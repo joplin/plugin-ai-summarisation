@@ -17,7 +17,7 @@ joplin.plugins.register({
       // Dialogs
       const dialogButtons = [
         {
-          id: 'ok',
+          id: 'submit',
           title: 'Save'
           
         },
@@ -41,9 +41,9 @@ joplin.plugins.register({
       await panel.registerPanel();
 
       // Content Menus
-      initNoteContextMenu(noteDialog, panel);
-      initEditorContextMenu(editorDialog, panel);
-      initNotebookContextMenu(notebookDialog, panel);
+      initNoteContextMenu(noteDialog);
+      initEditorContextMenu(editorDialog);
+      initNotebookContextMenu(notebookDialog);
 
       // Web Workers
       initWorkers()

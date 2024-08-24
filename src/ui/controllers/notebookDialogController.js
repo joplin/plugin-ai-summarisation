@@ -19,7 +19,7 @@ document
   });
 
 document
-  .querySelectorAll('inpit[name="summary-model-radio-buttons"]')
+  .querySelectorAll('input[name="summary-notebook-option"]')
   .forEach((elem) => {
     elem.addEventListener("change", function (event) {
       currNotesSelection = event.target.value;

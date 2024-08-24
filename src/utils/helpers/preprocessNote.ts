@@ -1,6 +1,6 @@
 const natural = require("natural");
 
-function preprocessNote(note) {
+export function preprocessNote(note) {
   const sentenceTokenizer = new natural.SentenceTokenizer();
   const wordTokenizer = new natural.TreebankWordTokenizer();
   const stopWords = new Set(natural.stopwords);
@@ -14,7 +14,3 @@ function preprocessNote(note) {
 
   return { sentences, processedSentences };
 }
-
-module.exports = {
-  preprocessNote,
-};

@@ -12,7 +12,7 @@ const logger = require("electron-log");
 async function initEditorContextMenu(editorDialog: EditorDialog) {
   await joplin.commands.register({
     name: "ai.editorCommandContextMenu.textrank",
-    label: "Summarize the highlighted text",
+    label: "Summarise highlighted",
     execute: async () => {
       const selectedText = (await joplin.commands.execute(
         "selectedText",
@@ -37,7 +37,7 @@ async function initEditorContextMenu(editorDialog: EditorDialog) {
       const summaryConfig: string =
         result["formData"]["note-ai-summarization"];
 
-      if(result.id === "ok") {
+      if(result.id === "submit") {
         const summaryBot = new SummaryBot();
         const note = await joplin.data.get(["notes", selectedNote["id"]], {
           fields: ["id", "title", "body"],

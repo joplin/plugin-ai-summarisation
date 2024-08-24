@@ -86,6 +86,7 @@ export class KMeansClustering extends AIHandler {
   vectorizeSentences(processedSentences, tfidf) {
     const allWords = [...new Set(processedSentences.flat())];
     const sentenceVectors = tfidf.map((sentenceTfidf) =>
+      // @ts-ignore
       allWords.map((word) => sentenceTfidf[word] || 0),
     );
     return sentenceVectors;

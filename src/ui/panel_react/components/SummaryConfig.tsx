@@ -305,10 +305,10 @@ export default function SummaryConfig() {
           size="sm"
         />
         <ButtonGroup variant="outline" spacing="3">
-          <Button onClick={handleSubmitSummary} colorScheme="blue">
+          <Button onClick={handleSubmitSummary} style={ { backgroundColor: "#458cff", color: "white"} }>
             Save
           </Button>
-          <Button onClick={handleBackClick}>Cancel</Button>
+          <Button onClick={handleBackClick} style={{ color: "#458cff" }}>Cancel</Button>
         </ButtonGroup>
       </div>
     </CraftSummaryContainer>

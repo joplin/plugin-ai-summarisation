@@ -22,6 +22,7 @@ function computeIDF(processedSentences) {
 
   for (const sentence of processedSentences) {
     for (const word of new Set(sentence)) {
+      // @ts-ignore
       idf[word] = !idf[word] ? 1 : idf[word] + 1;
     }
   }
@@ -45,14 +46,10 @@ function computeTFIDF(tf, idf) {
   return tfidf;
 }
 
-function getTFIDF(processedSentences) {
+export function getTFIDF(processedSentences) {
   const tf = computeTF(processedSentences);
   const idf = computeIDF(processedSentences);
   const tfidf = computeTFIDF(tf, idf);
 
   return tfidf;
 }
-
-module.exports = {
-  getTFIDF,
-};

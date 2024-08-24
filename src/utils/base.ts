@@ -10,6 +10,7 @@ export class AIHandler {
     if (this.constructor == AIHandler) {
       throw new Error("Abstract class can't be instantiated");
     }
+    // @ts-ignore
     if (this.predict == undefined && this.describe == undefined) {
       throw new Error(
         "predict(data) and describe() methods must be implemented",

@@ -37,6 +37,7 @@ export default function NoteDetails() {
 
   return (
     <NoteDetailsContainer>
+      
       <TiptapEditor
         key={selectedNoteId}
         content={displaySummary()}

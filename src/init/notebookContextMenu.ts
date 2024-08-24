@@ -93,7 +93,7 @@ async function summarizeImmediateChildren(parentId, allNotes) {
 async function initNotebookContextMenu(notebookDialog: NotebookDialog) {
   await joplin.commands.register({
     name: "ai.notebookCommandContextMenu.textrank",
-    label: "Summarize the notebook",
+    label: "Summarise notebook",
     execute: async (folderId: string) => {
       const allNotebooks = await joplin.data.get(["folders"]);
       const allNotes = await joplin.data.get(["notes"]);
@@ -107,7 +107,7 @@ async function initNotebookContextMenu(notebookDialog: NotebookDialog) {
       const summarizeOption =
         result["formData"]["note-ai-summarization"]["summary-notebook-option"];
 
-      if(result.id === "ok") {
+      if(result.id === "submit") {
 
         if (summarizeOption === "immediateChildrenNotes") {
           summarizeImmediateChildren(folderId, allNotes["items"]);

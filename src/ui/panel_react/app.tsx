@@ -25,8 +25,20 @@ const Body = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 20px;
-  max-height: 400px;
+  max-height: 900px;
   overflow-y: scroll;
+
+  @media (max-height: 700px) {
+    max-height: 430px;
+  }
+
+  @media (max-height: 770px) {
+    max-height: 450px;
+  }
+
+  @media (max-height: 400px) {
+    max-height: 320px;
+  }
 `;
 
 export default function App() {

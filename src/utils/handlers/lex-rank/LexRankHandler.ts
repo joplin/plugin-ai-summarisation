@@ -138,6 +138,7 @@ export class LexRankHandler extends AIHandler {
 
     for (const sentence of processedSentences) {
       for (const word of new Set(sentence)) {
+        // @ts-ignore
         idf[word] = !idf[word] ? 1 : idf[word] + 1;
       }
     }
