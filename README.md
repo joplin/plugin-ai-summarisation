@@ -73,7 +73,7 @@ In Joplin, you can summarise notes by using:
 
 Run unit tests by running `npm run test`. The testing framework that we are using is `jest`.
 
-## 4 📹 Video Demonstration
+## 4. 📹 Video Demonstration
 
 ### 4.1 Panel
 
