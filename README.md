@@ -69,22 +69,21 @@ In Joplin, you can summarise notes by using:
 2. Notebook Context Menu
 3. Editor Context Menu
 
-##### Testing
+## 3. Testing
 
 Run unit tests by running `npm run test`. The testing framework that we are using is `jest`.
 
-### 2.3 📹 Video Demonstration
+## 4 📹 Video Demonstration
 
-#### 2.3.1 Panel
+### 4.1 Panel
 
 https://github.com/user-attachments/assets/4f2d1786-b7f2-4cfc-8210-f166dc7888b6
 
 ---
 
-#### 2.3.2 Context Menus
+### 4.2 Context Menus
 
 https://github.com/user-attachments/assets/4506769c-d2ad-4e97-a1aa-e193aab9ca4d
-
 
 # About the plugin
 
