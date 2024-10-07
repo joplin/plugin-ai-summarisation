@@ -66,7 +66,7 @@ export class SummarisationPanel {
         this.panelInstance,
         "./ui/panel_react/index.js",
       );
-      await joplin.views.panels.show(this.panelInstance);
+      await joplin.views.panels.hide(this.panelInstance);
       joplin.views.panels.onMessage(this.panelInstance, this.handleMessage);
 
       await joplin.commands.register({

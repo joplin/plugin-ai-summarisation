@@ -9,6 +9,12 @@ async function initCustomSettings() {
       label: "Toggle between list and tree view",
       public: true,
     },
+    togglePanel: {
+      value: false,
+      type: SettingItemType.Bool,
+      label: "Toggle between opening and closing AI Summarisation Panel",
+      public: true,
+    }
   });
 }
 

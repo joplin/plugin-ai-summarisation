@@ -8,6 +8,7 @@ const { initNoteContextMenu } = require("./init/noteContextMenu");
 const { initEditorContextMenu } = require("./init/editorContextMenu");
 const { initNotebookContextMenu } = require("./init/notebookContextMenu");
 const { initWorkers } = require("./init/initWorkers");
+const { initCustomSettings } = require("./init/initCustomSettings");
 
 joplin.plugins.register({
   onStart: async function () {
@@ -46,7 +47,10 @@ joplin.plugins.register({
       initNotebookContextMenu(notebookDialog);
 
       // Web Workers
-      initWorkers()
+      initWorkers();
+
+      // Settings
+      initCustomSettings();
 
       logger.info(
         "Joplin AI Summarisation plugin has been successfully initialized.",
